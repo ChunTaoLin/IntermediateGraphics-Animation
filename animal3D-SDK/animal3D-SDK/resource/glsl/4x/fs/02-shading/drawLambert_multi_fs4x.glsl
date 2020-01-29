@@ -31,10 +31,14 @@
 //	4) implement Lambert shading model
 //	Note: test all data and inbound values before using them!
 
+uniform vec4 texture;
+layout (location = 8) in vec4 aTexCoord;
+
 out vec4 rtFragColor;
 
 void main()
 {
+	vec4 sample = texture(texture,aTexCoord);
 	// DUMMY OUTPUT: all fragments are OPAQUE RED
-	rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	rtFragColor = sample;
 }
