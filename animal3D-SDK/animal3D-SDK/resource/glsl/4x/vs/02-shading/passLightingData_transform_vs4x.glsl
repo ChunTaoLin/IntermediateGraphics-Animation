@@ -43,13 +43,13 @@ uniform mat4 uP;
 uniform mat4 uMV_nrm;
 layout (location = 0) in vec4 aPosition;
 layout (location = 2) in vec4 normal;
-out mat4 viewPosition;
-out mat4 mVNormal;
+out vec4 viewPosition;
+out vec4 mVNormal;
 
 void main()
 {
-	aPosition = aPosition * uMV;
-	viewPosition = aPosition * uP;
+	viewPosition = aPosition * uMV;
+	viewPosition = viewPosition * uP;
 	mVNormal = normal * uMV_nrm;
 	gl_Position = aPosition;
 }
