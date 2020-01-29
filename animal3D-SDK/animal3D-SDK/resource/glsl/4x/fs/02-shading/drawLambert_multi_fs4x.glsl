@@ -41,17 +41,17 @@ in vec4 mVNormal;
 
 out vec4 rtFragColor;
 
-float specularMagnifier = .1;
+float specularMagnifier = 0.3;
 
 vec4 CalculateLightVector(vec4 position, vec4 lightPos) 
 {
-	vec4 lightNorm = lightPos - position;
+	vec4 lightNorm = normalize(lightPos) - normalize(position);
 	return normalize(lightNorm);
 }
 
 vec4 CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
 {
-	return 2 * dot(surfaceNormal,lightNormal) * surfaceNormal - lightNormal;
+	return max(2 * dot(surfaceNormal,lightNormal) * surfaceNormal - lightNormal,0.0);
 }
 
 float CalculateDiffuse(vec4 surfaceNormal, vec4 lightNormal)
@@ -84,6 +84,6 @@ void main()
 	//originalTex = originalTex * CalculateSpecularCoefficient(uLightPos[0],viewPosition,lambertianProduct);
 
 	//result = mix(originalTex,uLightCol[0],.5);
-	vec4 result = mix(uLightCol[0],originalTex,1);
-	rtFragColor = result * CalculateSpecularCoefficient(uLightPos[0],viewPosition,lambertianProduct);//originalTex;//color1;//mix(color1,lambertianProduct,.5);//lambertianProduct;
+	//vec4 result = mix(uLightCol[0],originalTex,1);
+	rtFragColor = originalTex * CalculateSpecularCoefficient(uLightPos[0],viewPosition,lambertianProduct);//originalTex;//color1;//mix(color1,lambertianProduct,.5);//lambertianProduct;
 }
