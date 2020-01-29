@@ -41,15 +41,18 @@
 uniform mat4 uMV;
 uniform mat4 uP;
 uniform mat4 uMV_nrm;
+uniform mat4 uAtlas;
 layout (location = 0) in vec4 aPosition;
-layout (location = 2) in vec4 normal;
+layout (location = 2) in vec4 aNormal;
+layout (location = 8) in vec4 aTexCoord;
+layout (location = 8) out vec4 aTexCoordOut;
 out vec4 viewPosition;
 out vec4 mVNormal;
 
 void main()
 {
-	viewPosition = aPosition * uMV;
-	viewPosition = viewPosition * uP;
-	mVNormal = normal * uMV_nrm;
-	gl_Position = aPosition;
+	aTexCoordOut = aTexCoord * uAtlas;
+	viewPosition = uMV * aPosition;
+	mVNormal = uMV_nrm * aNormal;
+	gl_Position = uP * viewPosition;
 }

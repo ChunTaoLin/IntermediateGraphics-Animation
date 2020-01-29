@@ -32,11 +32,58 @@
 //	Note: test all data and inbound values before using them!
 
 uniform sampler2D uTex_dm;
+uniform vec4 uLightPos[4];
+uniform vec4 uLightCol[4];
 layout (location = 8) in vec4 aTexCoord;
+
+in vec4 viewPosition;
+in vec4 mVNormal;
 
 out vec4 rtFragColor;
 
+float specularMagnifier = .1;
+
+vec4 CalculateLightVector(vec4 position, vec4 lightPos) 
+{
+	vec4 lightNorm = lightPos - position;
+	return normalize(lightNorm);
+}
+
+vec4 CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
+{
+	return 2 * dot(surfaceNormal,lightNormal) * surfaceNormal - lightNormal;
+}
+
+float CalculateDiffuse(vec4 surfaceNormal, vec4 lightNormal)
+{
+	return max(dot(surfaceNormal,lightNormal),0.1);
+}
+
+float CalculateSpecularCoefficient(vec4 viewPos, vec4 surfacePoint, vec4 lambertianProd)
+{
+	vec4 specular = viewPos - surfacePoint;
+
+	specular = normalize(specular);
+
+	float endCoefficient = pow(dot(specular, lambertianProd),specularMagnifier);
+	return endCoefficient;
+}
+
 void main()
 {
-	rtFragColor = texture(uTex_dm, aTexCoord.xy);
+	vec4 lambertianProduct = normalize(CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[0])));
+//	lambertianProduct += normalize(CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[1])));
+//	lambertianProduct += normalize(CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[2])));
+//	lambertianProduct += normalize(CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[3])));
+//
+	vec4 originalTex = texture(uTex_dm, aTexCoord.xy); 
+//	originalTex = mix(originalTex,uLightCol[0],.1);
+//	originalTex = mix(originalTex,uLightCol[1],.1);
+//	originalTex = mix(originalTex,uLightCol[2],.1);
+//	originalTex = mix(originalTex,uLightCol[3],.1);
+	//originalTex = originalTex * CalculateSpecularCoefficient(uLightPos[0],viewPosition,lambertianProduct);
+
+	//result = mix(originalTex,uLightCol[0],.5);
+	vec4 result = mix(uLightCol[0],originalTex,1);
+	rtFragColor = result * CalculateSpecularCoefficient(uLightPos[0],viewPosition,lambertianProduct);//originalTex;//color1;//mix(color1,lambertianProduct,.5);//lambertianProduct;
 }
