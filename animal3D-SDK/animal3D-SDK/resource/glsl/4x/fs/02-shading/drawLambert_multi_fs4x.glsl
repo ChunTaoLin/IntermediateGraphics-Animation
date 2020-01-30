@@ -35,9 +35,8 @@ uniform sampler2D uTex_dm;
 uniform vec4 uLightPos[4];
 uniform vec4 uLightCol[4];
 layout (location = 8) in vec4 aTexCoord;
-
 in vec4 viewPosition;
-in vec4 mVNormal;
+layout (location = 2) in vec4 mVNormal;
 
 out vec4 rtFragColor;
 
@@ -52,11 +51,6 @@ vec4 CalculateLightVector(vec4 position, vec4 lightPos)
 vec4 CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
 {
 	return max(2 * dot(surfaceNormal,lightNormal) * surfaceNormal - lightNormal,0.0);
-}
-
-float CalculateDiffuse(vec4 surfaceNormal, vec4 lightNormal)
-{
-	return max(dot(surfaceNormal,lightNormal),0.1);
 }
 
 float CalculateSpecularCoefficient(vec4 viewPos, vec4 surfacePoint, vec4 lambertianProd)
@@ -85,5 +79,7 @@ void main()
 
 	//result = mix(originalTex,uLightCol[0],.5);
 	//vec4 result = mix(uLightCol[0],originalTex,1);
-	rtFragColor = originalTex * CalculateSpecularCoefficient(uLightPos[0],viewPosition,lambertianProduct);//originalTex;//color1;//mix(color1,lambertianProduct,.5);//lambertianProduct;
+
+
+	rtFragColor =  originalTex * CalculateSpecularCoefficient(uLightPos[0],viewPosition,lambertianProduct);//originalTex;//color1;//mix(color1,lambertianProduct,.5);//lambertianProduct;
 }

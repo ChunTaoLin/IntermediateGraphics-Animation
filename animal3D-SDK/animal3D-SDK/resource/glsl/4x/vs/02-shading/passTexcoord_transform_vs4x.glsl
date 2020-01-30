@@ -38,7 +38,6 @@ uniform mat4 uAtlas;
 layout (location = 0) in vec4 aPosition;
 layout (location = 8) in vec4 aTexCoord;
 layout (location = 8) out vec4 aTexCoordOut;
-//out vec4 aTexCoordOut;
 
 void main()
 {
