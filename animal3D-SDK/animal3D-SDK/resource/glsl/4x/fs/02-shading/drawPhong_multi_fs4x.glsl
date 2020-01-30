@@ -31,49 +31,58 @@
 //	4) implement Phong shading model
 //	Note: test all data and inbound values before using them!
 
+
+// Texture Values
 uniform sampler2D uTex_dm;
+layout (location = 8) in vec4 aTexCoord;
+
+// Light Values
 uniform vec4 uLightPos[4];
 uniform vec4 uLightCol[4];
 uniform int uLightCt;
 
-layout (location = 8) in vec4 aTexCoord;
+// Transform Values
 in vec4 passViewPosition;
 layout (location = 2) in vec4 mVNormal;
 
-out vec4 rtFragColor;
-
+// Magnification Values
 float specularMagnifier = .4;
 float shininess = 2;
-float ambiance = 0.01;
 float diffuseMagnifier = 0.5;
 
-//Lambert stuff
+//Phong Values
 float lambertianProduct;
-float lambertianProduct2;
-float lambertianProduct3;
-float lambertianProduct4;
+float specularProduct;
+float ambiance = 0.01;
 
-float ambience1;
-float ambience2;
-float ambience3;
-float ambience4;
+out vec4 rtFragColor;
 
-float specularProduct1;
-float specularProduct2;
-float specularProduct3;
-float specularProduct4;
 
+
+
+
+// This function calculates the light vector from a given view position and light position
 vec4 CalculateLightVector(vec4 position, vec4 lightPos) 
 {
 	vec4 lightNorm = lightPos - position;
 	return normalize(lightNorm);
 }
 
+
+
+
+
+// This function calculates the lambertian product from a given surface normal and light normal
 float CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
 {
 	return dot(surfaceNormal,lightNormal);
 }
 
+
+
+
+
+// This function calculates the specular coefficient from a given surface normal, view position, perspective point, and light normal
 float CalculateSpecularCoefficient(vec4 surfaceNormal, vec4 viewPos, vec4 perspectivePoint, vec4 lightingNormal)
 {
 	vec4 specular =  normalize(perspectivePoint - viewPos);
@@ -84,83 +93,38 @@ float CalculateSpecularCoefficient(vec4 surfaceNormal, vec4 viewPos, vec4 perspe
 	return endCoefficient;
 }
 
+
+
+
+
 void main()
 {
-	float lambertianProduct = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));
-	vec4 perspectivePosition = vec4(0,0,0,0);
+	// Point of the viewer
+	vec4 perspectivePosition = vec4(0,0,0,1);
 
+	// Make texture color
 	vec4 originalTex = texture(uTex_dm, aTexCoord.xy); 
 
+	// Phong shading for Light 1
+	specularProduct = min(max((uLightCt - 0),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[0]));
+	lambertianProduct = min(max((uLightCt - 0),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));
+	vec4 mixedColors = uLightCol[0] * lambertianProduct + specularProduct + (min(max((uLightCt - 0),0),1) * ambiance);
 
-	if(uLightCt >= 1)
-	{
-		
-		ambience1 = ambiance;
+	// Phong shading for Light 2
+	specularProduct = min(max((uLightCt - 1),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[1]));
+	lambertianProduct = min(max((uLightCt - 1),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[1]));
+	mixedColors += uLightCol[1] * lambertianProduct + specularProduct + (min(max((uLightCt - 1),0),1) * ambiance);
 
-		specularProduct1 = specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[0]));
+	// Phong shading for Light 3
+	specularProduct = min(max((uLightCt - 2),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[2]));
+	lambertianProduct = min(max((uLightCt - 2),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[2]));
+	mixedColors += uLightCol[2] * lambertianProduct + specularProduct + (min(max((uLightCt - 2),0),1) * ambiance);
 
-		lambertianProduct = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));//white spot
-	}
-	else
-	{
-		lambertianProduct = 0;
-		specularProduct1 = 0;
-		ambience1 = 0;
-	}
+	// Phong shading for Light 4
+	specularProduct = min(max((uLightCt - 3),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[3]));
+	lambertianProduct = min(max((uLightCt - 3),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[3]));
+	mixedColors += uLightCol[3] * lambertianProduct + specularProduct + (min(max((uLightCt - 3),0),1) * ambiance);
 
-	if(uLightCt >= 2)
-	{
-		ambience2 = ambiance;
-
-		specularProduct2 = specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[1]));
-
-		lambertianProduct2 = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[1]));//purplewhite
-	}
-	else
-	{
-
-		lambertianProduct2 = 0;
-		specularProduct2 = 0;
-		ambience2 = 0;
-	}
-
-	if(uLightCt >= 3)
-	{
-		
-		ambience3 = ambiance;
-
-		specularProduct3 = specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[2]));
-
-		lambertianProduct3 = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[2]));//yellowspot
-	}
-	else 
-	{
-		lambertianProduct3 = 0;
-		specularProduct3 = 0;
-		ambience3 = 0;
-	}
-
-	if(uLightCt == 4)
-	{	
-		ambience4 = ambiance;
-
-		specularProduct4 = specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[3]));
-
-		lambertianProduct4 = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[3]));//bluespot
-	}
-	else
-	{
-		lambertianProduct4 = 0;
-		ambience4 = 0;
-		specularProduct3 = 0;
-	}
-
-	vec4 color1 = uLightCol[0] * lambertianProduct + specularProduct1 + ambience1;
-	vec4 color2 = uLightCol[1] * lambertianProduct2 + specularProduct2 + ambience2;
-	vec4 color3 = uLightCol[2] * lambertianProduct3 + specularProduct3 + ambience3;
-	vec4 color4 = uLightCol[3] * lambertianProduct4 + specularProduct4 + ambience4;
-
-	vec4 mixedColors = color1 + color2 + color3 + color4;
-
+	// Return final color
 	rtFragColor = originalTex * mixedColors;
 }

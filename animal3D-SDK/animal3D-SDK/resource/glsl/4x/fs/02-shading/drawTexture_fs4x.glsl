@@ -30,11 +30,14 @@
 //	3) sample texture using texture coordinate
 //	4) assign sample to output color
 
+// Texture Values
 uniform sampler2D uTex_dm;
 layout (location = 8) in vec4 aTexCoord;
+
 out vec4 rtFragColor;
 
 void main()
 {
+	// Apply texture onto given pixel
 	rtFragColor = texture(uTex_dm,aTexCoord.xy);
 }

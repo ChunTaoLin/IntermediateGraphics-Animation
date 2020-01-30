@@ -38,21 +38,34 @@
 //	10+) see instructions in passTexcoord...vs4x.glsl for information on 
 //		how to handle the texture coordinate
 
+// Uniforms
 uniform mat4 uMV;
 uniform mat4 uP;
 uniform mat4 uMV_nrm;
 uniform mat4 uAtlas;
+
+// Transform Values
 layout (location = 0) in vec4 aPosition;
 layout (location = 2) in vec4 oldNormal;
-layout (location = 8) in vec4 aTexCoord;
-layout (location = 8) out vec4 aTexCoordOut;
 layout (location = 2) out vec4 newNormal;
 out vec4 passViewPosition;
 
+// Texture values
+layout (location = 8) in vec4 aTexCoord;
+layout (location = 8) out vec4 aTexCoordOut;
+
+
 void main()
 {
+	// Transform texture Coordinates by Atlas matrix 
 	aTexCoordOut = aTexCoord * uAtlas;
+
+	// Transform the position into view space
 	passViewPosition = uMV * aPosition;
+
+	// Get new normal by transforming it by the uMV_nrm matrix
 	newNormal = normalize(uMV_nrm * oldNormal);
-	gl_Position =  uP * passViewPosition ;
+
+	//Return the view space position into clip space
+	gl_Position =  uP * passViewPosition;
 }
