@@ -31,10 +31,53 @@
 //	4) implement Phong shading model
 //	Note: test all data and inbound values before using them!
 
+uniform sampler2D uTex_dm;
+uniform vec4 uLightPos[4];
+uniform vec4 uLightCol[4];
+layout (location = 8) in vec4 aTexCoord;
+in vec4 passViewPosition;
+layout (location = 2) in vec4 mVNormal;
+
 out vec4 rtFragColor;
+
+float specularMagnifier = 1;
+float shininess = 2;
+float ambiance = 0.1;
+
+vec4 CalculateLightVector(vec4 position, vec4 lightPos) 
+{
+	vec4 lightNorm = lightPos - position;
+	return normalize(lightNorm);
+}
+
+float CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
+{
+	return dot(surfaceNormal,lightNormal);
+}
+
+float CalculateSpecularCoefficient(vec4 surfaceNormal, vec4 viewPos, vec4 perspectivePoint, vec4 lightingNormal)
+{
+	vec4 specular =  normalize(perspectivePoint - viewPos);
+
+	vec4 reflection = (2 * (dot(surfaceNormal,lightingNormal)) * surfaceNormal) - lightingNormal;
+
+	float endCoefficient = max(0.0, pow(dot(-specular, reflection),shininess));
+	return endCoefficient;
+}
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE GREEN
-	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
+	float lambertianProduct = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));
+	vec4 perspectivePosition = vec4(0,0,0,0);
+
+	vec4 originalTex = texture(uTex_dm, aTexCoord.xy); 
+
+	vec4 ambient = ambiance * uLightCol[0];
+	vec4 ambienceResult = originalTex * ambient;
+
+	vec4 diffuse = originalTex * CalculateLambertianProduct(mVNormal,CalculateLightVector(passViewPosition,uLightPos[0]));
+
+	vec4 specularProduct = originalTex * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[0]));
+
+	rtFragColor = diffuse + specularProduct + ambient;
 }

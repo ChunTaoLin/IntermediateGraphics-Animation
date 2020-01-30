@@ -47,12 +47,12 @@ layout (location = 2) in vec4 oldNormal;
 layout (location = 8) in vec4 aTexCoord;
 layout (location = 8) out vec4 aTexCoordOut;
 layout (location = 2) out vec4 newNormal;
-out vec4 viewPosition;
+out vec4 passViewPosition;
 
 void main()
 {
 	aTexCoordOut = aTexCoord * uAtlas;
-	viewPosition = uMV * aPosition;
+	passViewPosition = uMV * aPosition;
 	newNormal = normalize(uMV_nrm * oldNormal);
-	gl_Position =  uP * viewPosition ;
+	gl_Position =  uP * passViewPosition ;
 }
