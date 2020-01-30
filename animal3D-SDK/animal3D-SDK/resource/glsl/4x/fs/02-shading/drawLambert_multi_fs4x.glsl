@@ -81,5 +81,5 @@ void main()
 	//vec4 result = mix(uLightCol[0],originalTex,1);
 
 
-	rtFragColor =  originalTex * CalculateSpecularCoefficient(uLightPos[0],viewPosition,lambertianProduct);//originalTex;//color1;//mix(color1,lambertianProduct,.5);//lambertianProduct;
+	rtFragColor =  originalTex * CalculateSpecularCoefficient(viewPosition,mVNormal,lambertianProduct);//originalTex;//color1;//mix(color1,lambertianProduct,.5);//lambertianProduct;
 }
