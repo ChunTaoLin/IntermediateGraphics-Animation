@@ -37,7 +37,7 @@ uniform vec4 uLightCol[4];
 uniform int uLightCt;
 
 layout (location = 8) in vec4 aTexCoord;
-in vec4 viewPosition;
+in vec4 passViewPosition;
 layout (location = 2) in vec4 mVNormal;
 
 out vec4 rtFragColor;
@@ -75,28 +75,28 @@ void main()
 
 	if(uLightCt >= 1)
 	{
-		lambertianProduct = CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[0]));//white spot
+		lambertianProduct = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));//white spot
 	}
 	else
 		lambertianProduct = 0;
 
 	if(uLightCt >= 2)
 	{
-		lambertianProduct2 = CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[1]));//purplewhite
+		lambertianProduct2 = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[1]));//purplewhite
 	}
 	else
 		lambertianProduct2 = 0;
 
 	if(uLightCt >= 3)
 	{
-		lambertianProduct3 = CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[2]));//yellowspot
+		lambertianProduct3 = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[2]));//yellowspot
 	}
 	else 
 		lambertianProduct3 = 0;
 
 	if(uLightCt == 4)
 	{
-		lambertianProduct4 = CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[3]));//bluespot
+		lambertianProduct4 = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[3]));//bluespot
 	}
 	else
 		lambertianProduct4 = 0;
