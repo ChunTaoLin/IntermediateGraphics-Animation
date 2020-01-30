@@ -34,7 +34,7 @@
 uniform sampler2D uTex_dm;
 uniform vec4 uLightPos[4];
 uniform vec4 uLightCol[4];
-uniform float uLightCt;
+uniform int uLightCt;
 
 layout (location = 8) in vec4 aTexCoord;
 in vec4 passViewPosition;
@@ -42,7 +42,7 @@ layout (location = 2) in vec4 mVNormal;
 
 out vec4 rtFragColor;
 
-float specularMagnifier = 1;
+float specularMagnifier = .4;
 float shininess = 2;
 float ambiance = 0.01;
 float diffuseMagnifier = 0.5;
@@ -102,15 +102,11 @@ void main()
 		lambertianProduct = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));//white spot
 	}
 	else
+	{
 		lambertianProduct = 0;
 		specularProduct1 = 0;
 		ambience1 = 0;
-
-	ambience1 = ambiance;
-
-		specularProduct1 = specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[0]));
-
-		lambertianProduct = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));//white spot
+	}
 
 	if(uLightCt >= 2)
 	{
@@ -121,15 +117,12 @@ void main()
 		lambertianProduct2 = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[1]));//purplewhite
 	}
 	else
+	{
+
 		lambertianProduct2 = 0;
 		specularProduct2 = 0;
 		ambience2 = 0;
-
-	ambience2 = ambiance;
-
-		specularProduct2 = specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[1]));
-
-		lambertianProduct2 = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[1]));
+	}
 
 	if(uLightCt >= 3)
 	{
@@ -141,15 +134,11 @@ void main()
 		lambertianProduct3 = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[2]));//yellowspot
 	}
 	else 
+	{
 		lambertianProduct3 = 0;
 		specularProduct3 = 0;
 		ambience3 = 0;
-
-	ambience3 = ambiance;
-
-		specularProduct3 = specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[2]));
-
-		lambertianProduct3 = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[2]));
+	}
 
 	if(uLightCt == 4)
 	{	
@@ -160,15 +149,11 @@ void main()
 		lambertianProduct4 = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[3]));//bluespot
 	}
 	else
+	{
 		lambertianProduct4 = 0;
 		ambience4 = 0;
 		specularProduct3 = 0;
-
-	ambience4 = ambiance;
-
-		specularProduct4 = specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[3]));
-
-		lambertianProduct4 = diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[3]));
+	}
 
 	vec4 color1 = uLightCol[0] * lambertianProduct + specularProduct1 + ambience1;
 	vec4 color2 = uLightCol[1] * lambertianProduct2 + specularProduct2 + ambience2;
