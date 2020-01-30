@@ -101,19 +101,14 @@ void main()
 	else
 		lambertianProduct4 = 0;
 
-	float lambertianProductSum = lambertianProduct + lambertianProduct2 + lambertianProduct3 + lambertianProduct4;
-
 	vec4 originalTex = texture(uTex_dm, aTexCoord.xy); 
 
-	vec4 color1 = mix(originalTex,uLightCol[0],0.1) * lambertianProduct;
-	vec4 color2 = mix(originalTex,uLightCol[1],0.4) * lambertianProduct2;
-	vec4 color3 = mix(originalTex,uLightCol[2],0.4) * lambertianProduct3;
-	vec4 color4 = mix(originalTex,uLightCol[3],0.6) * lambertianProduct4;
+	vec4 color1 = uLightCol[0] * lambertianProduct;
+	vec4 color2 = uLightCol[1]  * lambertianProduct2;
+	vec4 color3 = uLightCol[2]  * lambertianProduct3;
+	vec4 color4 = uLightCol[3]  * lambertianProduct4;
 
-	vec4 mixedColors = color1;
-	mixedColors = mix(mixedColors, color2,.7);
-	mixedColors = mix(mixedColors, color3,.5);
-	mixedColors = mix(mixedColors, color4,.3);
+	vec4 mixedColors = color1 + color2 +color3+ color4;
 
-	rtFragColor = mixedColors * lambertianProductSum;
+	rtFragColor = mixedColors * originalTex;
 }
