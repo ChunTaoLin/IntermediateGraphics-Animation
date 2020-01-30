@@ -44,28 +44,28 @@ float specularMagnifier = 0.3;
 
 vec4 CalculateLightVector(vec4 position, vec4 lightPos) 
 {
-	vec4 lightNorm = normalize(lightPos) - normalize(position);
+	vec4 lightNorm = lightPos - position;
 	return normalize(lightNorm);
 }
 
-vec4 CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
+float CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
 {
-	return max(2 * dot(surfaceNormal,lightNormal) * surfaceNormal - lightNormal,0.0);
+	return dot(surfaceNormal,lightNormal);
 }
 
-float CalculateSpecularCoefficient(vec4 viewPos, vec4 surfacePoint, vec4 lambertianProd)
-{
-	vec4 specular = viewPos - surfacePoint;
+//float CalculateSpecularCoefficient(vec4 viewPos, vec4 surfacePoint, vec4 lambertianProd)
+//{
+//	vec4 specular = viewPos - surfacePoint;
 
-	specular = normalize(specular);
+//	specular = specular;
 
-	float endCoefficient = pow(dot(specular, lambertianProd),specularMagnifier);
-	return endCoefficient;
-}
+//	float endCoefficient = pow(dot(specular, lambertianProd),specularMagnifier);
+//	return endCoefficient;
+//}
 
 void main()
 {
-	vec4 lambertianProduct = normalize(CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[0])));
+	float lambertianProduct = CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[0]));
 //	lambertianProduct += normalize(CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[1])));
 //	lambertianProduct += normalize(CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[2])));
 //	lambertianProduct += normalize(CalculateLambertianProduct(mVNormal, CalculateLightVector(viewPosition,uLightPos[3])));
@@ -81,5 +81,5 @@ void main()
 	//vec4 result = mix(uLightCol[0],originalTex,1);
 
 
-	rtFragColor =  originalTex * CalculateSpecularCoefficient(viewPosition,mVNormal,lambertianProduct);//originalTex;//color1;//mix(color1,lambertianProduct,.5);//lambertianProduct;
+	rtFragColor = originalTex * lambertianProduct;//originalTex;//color1;//mix(color1,lambertianProduct,.5);//lambertianProduct;
 }
