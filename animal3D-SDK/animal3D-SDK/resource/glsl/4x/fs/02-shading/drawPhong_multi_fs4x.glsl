@@ -34,6 +34,8 @@
 uniform sampler2D uTex_dm;
 uniform vec4 uLightPos[4];
 uniform vec4 uLightCol[4];
+uniform float uLightCt;
+
 layout (location = 8) in vec4 aTexCoord;
 in vec4 passViewPosition;
 layout (location = 2) in vec4 mVNormal;
@@ -43,6 +45,12 @@ out vec4 rtFragColor;
 float specularMagnifier = 1;
 float shininess = 2;
 float ambiance = 0.1;
+
+//Lambert stuff
+float lambertianProduct;
+float lambertianProduct2;
+float lambertianProduct3;
+float lambertianProduct4;
 
 vec4 CalculateLightVector(vec4 position, vec4 lightPos) 
 {
@@ -79,5 +87,42 @@ void main()
 
 	vec4 specularProduct = originalTex * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[0]));
 
-	rtFragColor = diffuse + specularProduct + ambient;
+	if(uLightCt >= 1)
+	{
+		lambertianProduct = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));//white spot
+	}
+	else
+		lambertianProduct = 0;
+
+	if(uLightCt >= 2)
+	{
+		lambertianProduct2 = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[1]));//purplewhite
+	}
+	else
+		lambertianProduct2 = 0;
+
+	if(uLightCt >= 3)
+	{
+		lambertianProduct3 = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[2]));//yellowspot
+	}
+	else 
+		lambertianProduct3 = 0;
+
+	if(uLightCt == 4)
+	{
+		lambertianProduct4 = CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[3]));//bluespot
+	}
+	else
+		lambertianProduct4 = 0;
+
+	vec4 color1 = uLightCol[0] * lambertianProduct;
+	vec4 color2 = uLightCol[1]  * lambertianProduct2;
+	vec4 color3 = uLightCol[2]  * lambertianProduct3;
+	vec4 color4 = uLightCol[3]  * lambertianProduct4;
+
+	vec4 mixedColors = color1 + color2 +color3+ color4;
+
+	rtFragColor = diffuse + specularProduct + ambient + mixedColors * originalTex;
+
+		//rtFragColor = ;
 }

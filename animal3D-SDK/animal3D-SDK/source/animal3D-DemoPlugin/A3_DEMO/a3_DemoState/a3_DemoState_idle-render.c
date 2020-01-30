@@ -321,6 +321,7 @@ void a3demo_render_main(const a3_DemoState *demoState,
 		demoState->tex_mars_sm,
 		demoState->tex_checker,
 	};
+	
 
 	// ****TO-DO: 
 	//	-> 2.1d: convenient array of forward lighting shader programs
@@ -333,6 +334,7 @@ void a3demo_render_main(const a3_DemoState *demoState,
 		demoState->prog_drawPhong_multi,
 		demoState->prog_drawNonphoto_multi,
 	};
+	
 
 	// ****TO-DO: 
 	//	-> 3.1b: convenient arrays of lighting data
@@ -367,14 +369,14 @@ void a3demo_render_main(const a3_DemoState *demoState,
 		// ****TO-DO: 
 		//	-> 2.1e: replace uniform color program with texturing program
 		//currentDemoProgram = demoState->prog_drawColorUnif;
-	    currentDemoProgram = demoState->prog_drawTexture;
+		currentDemoProgram = demoState->prog_drawTexture;
 		a3shaderProgramActivate(currentDemoProgram->program);
 		a3real4x4Product(modelViewProjectionMat.m, activeCamera->viewProjectionMat.m, currentSceneObject->modelMat.m);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, modelViewProjectionMat.mm);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uAtlas, 1, a3mat4_identity.mm);
 		// ****TO-DO: 
 		//	-> 2.1f: activate skybox texture
-	    a3textureActivate(demoState->tex_skybox_clouds, a3tex_unit00);
+		a3textureActivate(demoState->tex_skybox_clouds, a3tex_unit00);
 
 		// change depth mode to 'always' to ensure box gets drawn and resets depth
 		// draw inverted box

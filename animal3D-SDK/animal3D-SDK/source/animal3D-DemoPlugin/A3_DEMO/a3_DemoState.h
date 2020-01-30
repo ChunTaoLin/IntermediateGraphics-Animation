@@ -298,6 +298,7 @@ extern "C"
 					prog_drawPhong_multi[1],					// draw Phong shading model, multiple lights
 					prog_drawLambert_multi[1],					// draw Lambert shading model, multiple lights
 					prog_drawTexture[1];						// draw texture
+				
 			};
 		};
 
