@@ -33,12 +33,11 @@
 // Texture Values
 uniform sampler2D uTex_dm;
 layout (location = 8) in vec4 aTexCoord;
-in vec4 aTexCoordOut;
 out vec4 rtFragColor;
 
 void main()
 {
 	// Apply texture onto given pixel
-	rtFragColor = texture(uTex_dm,aTexCoordOut.xy);
+	rtFragColor = texture(uTex_dm,aTexCoord.xy);
 }
 

@@ -35,7 +35,7 @@ uniform sampler2D uTex_dm;
 //layout (location = 8) in vec4 aTexCoordOut;
 layout (location = 0) out vec4 renderTarget;
 //layout (location = 3) out vec4 newRenderTarget;
-in vec4 aTexCoordOut;
+layout (location = 8) in vec4 aTexCoordOut;
 out vec4 rtFragColor;
 
 void main()
