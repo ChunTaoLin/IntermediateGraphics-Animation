@@ -33,10 +33,61 @@
 //	5) set location of final color render target (location 0)
 //	6) declare render targets for each attribute and shading component
 
+// Texture Values
+uniform sampler2D uTex_dm;
+layout (location = 8) in vec4 aTexCoord;
+
+// Lighting Values
+uniform vec4 uLightPos[4];
+uniform vec4 uLightCol[4];
+uniform int uLightCt;
+
+// Transform Values
+in vec4 passViewPosition;
+layout (location = 2) in vec4 mVNormal;
+
+// Magnification Values
+float diffuseMagnifier = 1;
+
 out vec4 rtFragColor;
+
+
+
+
+
+// This function calculates the lighting vector based on a given position and light position
+vec4 CalculateLightVector(vec4 position, vec4 lightPos) 
+{
+	vec4 lightNorm = lightPos - position;
+	return normalize(lightNorm);
+}
+
+
+
+
+
+// This function calculates the lambertian product based on a surface normal and lighting normal
+float CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
+{
+	return dot(surfaceNormal,lightNormal);
+}
+
+
+
+
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE RED
-	rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	// Calculate all Lambert shading values for each light
+	vec4 mixedColors = uLightCol[0] * min(max((uLightCt - 0),0),1) * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));
+	mixedColors += uLightCol[1] * min(max((uLightCt - 1),0),1) * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[1]));
+	mixedColors += uLightCol[2] * min(max((uLightCt - 2),0),1) * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[2]));
+	mixedColors += uLightCol[3] * min(max((uLightCt - 3),0),1) *CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[3]));
+
+	// Texture to point
+	vec4 originalTex = texture(uTex_dm, aTexCoord.xy); 
+
+	// Add color of finalized diffuse
+	rtFragColor = diffuseMagnifier * mixedColors * originalTex;
+	rtFragColor = vec4(rtFragColor.x,rtFragColor.y,rtFragColor.z,1.0);
 }
