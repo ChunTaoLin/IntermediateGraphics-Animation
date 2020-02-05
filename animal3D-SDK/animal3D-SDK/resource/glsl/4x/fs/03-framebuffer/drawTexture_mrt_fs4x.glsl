@@ -42,5 +42,5 @@ void main()
 	// Apply texture onto given pixel
 	rtFragColor = texture(uTex_dm,aTexCoordOut.xy);
 	renderTarget = rtFragColor;
-//	newRenderTarget =texture(uTex_dm,aTexCoordOut.xy);
+	newRenderTarget = aTexCoordOut;
 }

@@ -33,6 +33,22 @@
 //	5) set location of final color render target (location 0)
 //	6) declare render targets for each attribute and shading component
 
+layout (location = 0) out vec4 finalColorRenderTarget;
+layout (location = 1) out vec4 renderTargetViewPos;
+layout (location = 2) out vec4 renderTargetNormal;
+layout (location = 3) out vec4 renderTargetTexCoord;
+layout (location = 4) out vec4 renderTargetDiffuseMap;
+//layout (location = 5) out vec4 renderTargetSpecularMap;
+layout (location = 6) out vec4 renderTargetDiffuseTotal;
+//layout (location = 7) out vec4 renderTargetSpecularTotal;
+//layout (location = 8) out vec4 renderTargetDepthBuffer;
+//out vec4 renderTarget;
+//out vec4 renderTargetDiffuseTotal;
+//out vec4 
+//out vec4 renderTargetTexCoord;
+vec4 renderTargetSpecularMap;
+vec4 renderTargetSpecularTotal;
+//
 // Texture Values
 uniform sampler2D uTex_dm;
 layout (location = 8) in vec4 aTexCoord;
@@ -90,4 +106,15 @@ void main()
 	// Add color of finalized diffuse
 	rtFragColor = diffuseMagnifier * mixedColors * originalTex;
 	rtFragColor = vec4(rtFragColor.x,rtFragColor.y,rtFragColor.z,1.0);
+
+
+	renderTargetViewPos = passViewPosition;
+	renderTargetNormal = mVNormal * passViewPosition;
+	renderTargetTexCoord = aTexCoord;
+	renderTargetDiffuseMap = originalTex;
+	renderTargetSpecularMap = vec4(0.0,0.0,0.0,0.0);
+	renderTargetDiffuseTotal = diffuseMagnifier * mixedColors;
+	renderTargetSpecularTotal = vec4(0.0,0.0,0.0,0.0);
+	//final color
+	finalColorRenderTarget = rtFragColor;
 }
