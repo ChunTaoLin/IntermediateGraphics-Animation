@@ -38,17 +38,11 @@ layout (location = 1) out vec4 renderTargetViewPos;
 layout (location = 2) out vec4 renderTargetNormal;
 layout (location = 3) out vec4 renderTargetTexCoord;
 layout (location = 4) out vec4 renderTargetDiffuseMap;
-//layout (location = 5) out vec4 renderTargetSpecularMap;
+layout (location = 5) out vec4 renderTargetSpecularMap;
 layout (location = 6) out vec4 renderTargetDiffuseTotal;
-//layout (location = 7) out vec4 renderTargetSpecularTotal;
+layout (location = 7) out vec4 renderTargetSpecularTotal;
 //layout (location = 8) out vec4 renderTargetDepthBuffer;
-//out vec4 renderTarget;
-//out vec4 renderTargetDiffuseTotal;
-//out vec4 
-//out vec4 renderTargetTexCoord;
-vec4 renderTargetSpecularMap;
-vec4 renderTargetSpecularTotal;
-//
+
 // Texture Values
 uniform sampler2D uTex_dm;
 layout (location = 8) in vec4 aTexCoord;
@@ -65,10 +59,7 @@ layout (location = 2) in vec4 mVNormal;
 // Magnification Values
 float diffuseMagnifier = 1;
 
-out vec4 rtFragColor;
-
-
-
+vec4 rtFragColor;
 
 
 // This function calculates the lighting vector based on a given position and light position
@@ -79,18 +70,11 @@ vec4 CalculateLightVector(vec4 position, vec4 lightPos)
 }
 
 
-
-
-
 // This function calculates the lambertian product based on a surface normal and lighting normal
 float CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
 {
 	return dot(surfaceNormal,lightNormal);
 }
-
-
-
-
 
 void main()
 {
@@ -107,14 +91,14 @@ void main()
 	rtFragColor = diffuseMagnifier * mixedColors * originalTex;
 	rtFragColor = vec4(rtFragColor.x,rtFragColor.y,rtFragColor.z,1.0);
 
-
 	renderTargetViewPos = passViewPosition;
-	renderTargetNormal = mVNormal * passViewPosition;
+	renderTargetNormal = mVNormal + aTexCoord;
 	renderTargetTexCoord = aTexCoord;
 	renderTargetDiffuseMap = originalTex;
 	renderTargetSpecularMap = vec4(0.0,0.0,0.0,0.0);
-	renderTargetDiffuseTotal = diffuseMagnifier * mixedColors;
+	renderTargetDiffuseTotal = diffuseMagnifier + mixedColors;
 	renderTargetSpecularTotal = vec4(0.0,0.0,0.0,0.0);
+	
 	//final color
 	finalColorRenderTarget = rtFragColor;
 }
