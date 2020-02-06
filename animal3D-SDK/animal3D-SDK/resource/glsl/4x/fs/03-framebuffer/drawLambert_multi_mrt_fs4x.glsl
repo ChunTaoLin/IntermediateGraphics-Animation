@@ -41,7 +41,6 @@ layout (location = 4) out vec4 renderTargetDiffuseMap;
 layout (location = 5) out vec4 renderTargetSpecularMap;
 layout (location = 6) out vec4 renderTargetDiffuseTotal;
 layout (location = 7) out vec4 renderTargetSpecularTotal;
-//layout (location = 8) out vec4 renderTargetDepthBuffer;
 
 // Texture Values
 uniform sampler2D uTex_dm;
@@ -91,6 +90,7 @@ void main()
 	rtFragColor = diffuseMagnifier * mixedColors * originalTex;
 	rtFragColor = vec4(rtFragColor.x,rtFragColor.y,rtFragColor.z,1.0);
 
+		//Set the correct values to the render targets
 	renderTargetViewPos = passViewPosition;
 	renderTargetNormal = mVNormal + aTexCoord;
 	renderTargetTexCoord = aTexCoord;

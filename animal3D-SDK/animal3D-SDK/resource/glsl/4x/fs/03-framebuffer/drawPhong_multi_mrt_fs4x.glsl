@@ -39,13 +39,13 @@ layout (location = 1) out vec4 renderTargetViewPos;
 layout (location = 2) out vec4 renderTargetNormal;
 layout (location = 3) out vec4 renderTargetTexCoord;
 layout (location = 4) out vec4 renderTargetDiffuseMap;
-//layout (location = 5) out vec4 renderTargetSpecularMap;
+layout (location = 5) out vec4 renderTargetSpecularMap;
 layout (location = 6) out vec4 renderTargetDiffuseTotal;
-//layout (location = 7) out vec4 renderTargetSpecularTotal;
-//layout (location = 8) out vec4 renderTargetDepthBuffer;
+layout (location = 7) out vec4 renderTargetSpecularTotal;
 
 // Texture Values
 uniform sampler2D uTex_dm;
+uniform sampler2D uTex_sm;
 layout (location = 8) in vec4 aTexCoord;
 
 // Light Values
@@ -67,9 +67,7 @@ float lambertianProduct;
 float specularProduct;
 float ambiance = 0.01;
 
-out vec4 rtFragColor;
-
-
+vec4 rtFragColor = vec4(0.0,0.0,0.0,1.0);
 
 
 
@@ -82,15 +80,11 @@ vec4 CalculateLightVector(vec4 position, vec4 lightPos)
 
 
 
-
-
 // This function calculates the lambertian product from a given surface normal and light normal
 float CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
 {
 	return dot(surfaceNormal,lightNormal);
 }
-
-
 
 
 
@@ -108,7 +102,6 @@ float CalculateSpecularCoefficient(vec4 surfaceNormal, vec4 viewPos, vec4 perspe
 
 
 
-
 void main()
 {
 	// Point of the viewer
@@ -116,38 +109,52 @@ void main()
 
 	// Make texture color
 	vec4 originalTex = texture(uTex_dm, aTexCoord.xy); 
+	vec4 texSpec = texture(uTex_sm, aTexCoord.xy);
+
+	float totalSpecular;
+	vec4 spec;
 
 	// Phong shading for Light 1
 	specularProduct = min(max((uLightCt - 0),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[0]));
 	lambertianProduct = min(max((uLightCt - 0),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));
 	vec4 mixedColors = uLightCol[0] * lambertianProduct + specularProduct + (min(max((uLightCt - 0),0),1) * ambiance);
+	spec = specularProduct + lambertianProduct * uLightCol[0];
+	totalSpecular += specularProduct;
 
 	// Phong shading for Light 2
 	specularProduct = min(max((uLightCt - 1),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[1]));
 	lambertianProduct = min(max((uLightCt - 1),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[1]));
 	mixedColors += uLightCol[1] * lambertianProduct + specularProduct + (min(max((uLightCt - 1),0),1) * ambiance);
+	spec += specularProduct + lambertianProduct * uLightCol[1];
+	totalSpecular += specularProduct;
 
 	// Phong shading for Light 3
 	specularProduct = min(max((uLightCt - 2),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[2]));
 	lambertianProduct = min(max((uLightCt - 2),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[2]));
 	mixedColors += uLightCol[2] * lambertianProduct + specularProduct + (min(max((uLightCt - 2),0),1) * ambiance);
+	spec += specularProduct + lambertianProduct * uLightCol[2];
+	totalSpecular += specularProduct;
 
 	// Phong shading for Light 4
 	specularProduct = min(max((uLightCt - 3),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[3]));
 	lambertianProduct = min(max((uLightCt - 3),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[3]));
 	mixedColors += uLightCol[3] * lambertianProduct + specularProduct + (min(max((uLightCt - 3),0),1) * ambiance);
+		spec += specularProduct + lambertianProduct * uLightCol[3];
+	totalSpecular += specularProduct;
 
 	// Return final color
 	rtFragColor = originalTex * mixedColors;
 	rtFragColor = vec4(rtFragColor.x,rtFragColor.y,rtFragColor.z,1.0);
 
+	//Set the correct values to the render targets
+	finalColorRenderTarget = rtFragColor;
+
 	renderTargetViewPos = passViewPosition;
-	renderTargetNormal = mVNormal * passViewPosition;
+	renderTargetNormal = mVNormal + aTexCoord;
 	renderTargetTexCoord = aTexCoord;
 	renderTargetDiffuseMap = originalTex;
-	//renderTargetSpecularMap = vec4(0.0,0.0,0.0,0.0);
-	renderTargetDiffuseTotal = diffuseMagnifier * mixedColors;
-	//renderTargetSpecularTotal = vec4(0.0,0.0,0.0,0.0);
-	//final color
-	finalColorRenderTarget = rtFragColor;
+	renderTargetSpecularMap = texSpec;
+
+	renderTargetDiffuseTotal = diffuseMagnifier + mixedColors;
+	renderTargetSpecularTotal = spec + pow(specularMagnifier,1);
 }
