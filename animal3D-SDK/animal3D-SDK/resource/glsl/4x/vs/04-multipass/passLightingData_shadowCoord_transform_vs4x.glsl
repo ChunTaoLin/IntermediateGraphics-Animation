@@ -32,10 +32,40 @@
 //	2) declare varying for shadow coordinate
 //	3) calculate and pass shadow coordinate
 
+// Uniforms
+uniform mat4 uMV;
+uniform mat4 uP;
+uniform mat4 uMV_nrm;
+uniform mat4 uAtlas;
+uniform mat4 uMVPB_other;
+
+// Transform Values
 layout (location = 0) in vec4 aPosition;
+layout (location = 2) in vec4 oldNormal;
+layout (location = 2) out vec4 newNormal;
+out vec4 passViewPosition;
+
+// Texture values
+layout (location = 8) in vec4 aTexCoord;
+layout (location = 8) out vec4 aTexCoordOut;
+
+// Shading values
+out vec4 aShadowCoordOut;
 
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+	// Transform texture Coordinates by Atlas matrix 
+	aTexCoordOut = aTexCoord * uAtlas;
+
+	// Transform the position into view space
+	passViewPosition = uMV * aPosition;
+
+	// Get new normal by transforming it by the uMV_nrm matrix
+	newNormal = normalize(uMV_nrm * oldNormal);
+
+	// Calculate shadow coordinate
+	aShadowCoordOut = uMVPB_other * aPosition;
+
+	//Return the view space position into clip space
+	gl_Position =  uP * passViewPosition;
 }
