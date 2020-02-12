@@ -27,11 +27,14 @@
 // ****TO-DO: 
 //	0) copy existing texturing shader
 //	1) implement outline algorithm - see render code for uniform hints
+
 uniform sampler2D uTex_dm;
-uniform sampler2D uImage1;
+uniform sampler2D uTex_sm;
+
 
 layout (location = 8) in vec4 aTexCoord;
 
+///Sobel Matrixes
 mat3 sobelX = mat3(
 1.0,2.0,1.0,
 0.0,0.0,0.0,
@@ -47,49 +50,50 @@ mat3 sobelY = mat3(
 );
 
 vec3 diff;
-vec3 diff2;
+
+mat3 I;
 out vec4 rtFragColor;
+
+int lineThickness = 100;
+
+mat3 CalculateSobel(mat3 I, sampler2D image)
+{
+	//place gradient matrix over each pixel of the image to determine the difference.
+	for (int i  = 0; i < 3; i++)
+	{
+		for(int j = 0; j < 3; j++)
+		{
+			vec3 Sample = texelFetch(image,ivec2(gl_FragCoord)+ ivec2(i - 1,j- 1),0).rgb;
+			I[i][j] = length(Sample);
+		}
+	}
+	return I;
+}
+
+float CalculateGradient(float gradientX, float gradientY, float gradient)
+{
+	gradientX = dot(sobelX[0],I[0]) + dot(sobelX[1],I[1]) + dot(sobelX[2],I[2]);
+	gradientY = dot(sobelY[0],I[0]) + dot(sobelY[1],I[1]) + dot(sobelY[2],I[2]);
+
+	gradient = sqrt(pow(gradientX,2.0)+pow(gradientY,2.0));
+	return gradient;
+}
 
 void main()
 {
+	//Diffuse Map
 	diff = texture(uTex_dm,aTexCoord.xy).rgb;
-	mat3 I;
 	
-	//place gradient matrix over each pixel of the image to determine the difference.
-	for (int i  = 0; i < 3; i++)
-	{
-		for(int j = 0; j < 3; j++)
-		{
-			vec3 Sample = texelFetch(uTex_dm,ivec2(gl_FragCoord)+ ivec2(i -1,j-1),0).rgb;
-			I[i][j] = length(Sample);
-		}
-	}
+	//Sobel Algorithm
+	I = CalculateSobel(I,uTex_sm);
 
-	float gradientX = dot(sobelX[0],I[0]) + dot(sobelX[1],I[1]) + dot(sobelX[2],I[2]);
-	float gradientY = dot(sobelY[0],I[0]) + dot(sobelY[1],I[1]) + dot(sobelY[2],I[2]);
+	float gradientX;
+	float gradientY;
+	float gradient;
 
-	float gradient = sqrt(pow(gradientX,2.0)+pow(gradientY,2.0));
+	//Gradient Calc
+	gradient =	CalculateGradient(gradientX,gradientY,gradient);
 
-	gradient = smoothstep(0.4,0.6,gradient);
-
-	// Apply texture onto given pixel
-	rtFragColor = vec4(diff - gradient,1.0);
-
-	diff2 = texture(uImage1,aTexCoord.xy).rgb;
-
-	//place gradient matrix over each pixel of the image to determine the difference.
-	for (int i  = 0; i < 3; i++)
-	{
-		for(int j = 0; j < 3; j++)
-		{
-			vec3 Sample = texelFetch(uImage1,ivec2(gl_FragCoord)+ ivec2(i -1,j-1),0).rgb;
-			I[i][j] = length(Sample);
-		}
-	}
-
-	float gradientX2 = dot(sobelX[0],I[0]) + dot(sobelX[1],I[1]) + dot(sobelX[2],I[2]);
-	float gradientY2 = dot(sobelY[0],I[0]) + dot(sobelY[1],I[1]) + dot(sobelY[2],I[2]);
-
-	float gradient2 = sqrt(pow(gradientX2,2.0)+pow(gradientY2,2.0));
-		rtFragColor = rtFragColor + vec4(diff2 - gradient2,1.0);
+	//Output result
+	rtFragColor = vec4(diff - gradient * lineThickness,1.0);
 }
