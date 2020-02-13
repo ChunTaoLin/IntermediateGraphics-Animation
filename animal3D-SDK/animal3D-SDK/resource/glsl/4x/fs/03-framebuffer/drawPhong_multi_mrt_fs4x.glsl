@@ -32,11 +32,125 @@
 //	Note: test all data and inbound values before using them!
 //	5) set location of final color render target (location 0)
 //	6) declare render targets for each attribute and shading component
+layout (location = 0) out vec4 finalColorRenderTarget;
+layout (location = 1) out vec4 renderTargetViewPos;
+layout (location = 2) out vec4 renderTargetNormal;
+layout (location = 3) out vec4 renderTargetTexCoord;
+layout (location = 4) out vec4 renderTargetDiffuseMap;
+layout (location = 5) out vec4 renderTargetSpecularMap;
+layout (location = 6) out vec4 renderTargetDiffuseTotal;
+layout (location = 7) out vec4 renderTargetSpecularTotal;
 
-out vec4 rtFragColor;
+// Texture Values
+uniform sampler2D uTex_dm;
+uniform sampler2D uTex_sm;
+layout (location = 8) in vec4 aTexCoord;
+
+// Light Values
+uniform vec4 uLightPos[4];
+uniform vec4 uLightCol[4];
+uniform int uLightCt;
+
+// Transform Values
+in vec4 passViewPosition;
+layout (location = 2) in vec4 mVNormal;
+
+// Magnification Values
+float specularMagnifier = .4;
+float shininess = 2;
+float diffuseMagnifier = 0.5;
+
+//Phong Values
+float lambertianProduct;
+float specularProduct;
+float ambiance = 0.01;
+
+vec4 rtFragColor = vec4(0.0,0.0,0.0,1.0);
+
+// This function calculates the light vector from a given view position and light position
+vec4 CalculateLightVector(vec4 position, vec4 lightPos) 
+{
+	vec4 lightNorm = lightPos - position;
+	return normalize(lightNorm);
+}
+
+
+
+// This function calculates the lambertian product from a given surface normal and light normal
+float CalculateLambertianProduct(vec4 surfaceNormal, vec4 lightNormal) 
+{
+	return dot(surfaceNormal,lightNormal);
+}
+
+
+
+// This function calculates the specular coefficient from a given surface normal, view position, perspective point, and light normal
+float CalculateSpecularCoefficient(vec4 surfaceNormal, vec4 viewPos, vec4 perspectivePoint, vec4 lightingNormal)
+{
+	vec4 specular =  normalize(perspectivePoint - viewPos);
+
+	vec4 reflection = (2 * (dot(surfaceNormal,lightingNormal)) * surfaceNormal) - lightingNormal;
+
+	float endCoefficient = max(0.0, pow(dot(-specular, reflection),shininess));
+	return endCoefficient;
+}
+
+
+
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE GREEN
-	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
+	// Point of the viewer
+	vec4 perspectivePosition = vec4(0,0,0,1);
+
+	// Make texture color
+	vec4 originalTex = texture(uTex_dm, aTexCoord.xy); 
+	vec4 texSpec = texture(uTex_sm, aTexCoord.xy);
+
+	float totalSpecular;
+	vec4 spec;
+
+	// Phong shading for Light 1
+	specularProduct = min(max((uLightCt - 0),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[0]));
+	lambertianProduct = min(max((uLightCt - 0),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[0]));
+	vec4 mixedColors = uLightCol[0] * lambertianProduct + specularProduct + (min(max((uLightCt - 0),0),1) * ambiance);
+	spec = specularProduct* uLightCol[0];
+	totalSpecular += specularProduct;
+
+	// Phong shading for Light 2
+	specularProduct = min(max((uLightCt - 1),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[1]));
+	lambertianProduct = min(max((uLightCt - 1),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[1]));
+	mixedColors += uLightCol[1] * lambertianProduct + specularProduct + (min(max((uLightCt - 1),0),1) * ambiance);
+	spec += specularProduct * uLightCol[1];
+	totalSpecular += specularProduct;
+
+	// Phong shading for Light 3
+	specularProduct = min(max((uLightCt - 2),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[2]));
+	lambertianProduct = min(max((uLightCt - 2),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[2]));
+	mixedColors += uLightCol[2] * lambertianProduct + specularProduct + (min(max((uLightCt - 2),0),1) * ambiance);
+	spec += specularProduct * uLightCol[2];
+	totalSpecular += specularProduct;
+
+	// Phong shading for Light 4
+	specularProduct = min(max((uLightCt - 3),0),1) * specularMagnifier * CalculateSpecularCoefficient(mVNormal,passViewPosition, perspectivePosition,  CalculateLightVector(passViewPosition,uLightPos[3]));
+	lambertianProduct = min(max((uLightCt - 3),0),1) * diffuseMagnifier * CalculateLambertianProduct(mVNormal, CalculateLightVector(passViewPosition,uLightPos[3]));
+	mixedColors += uLightCol[3] * lambertianProduct + specularProduct + (min(max((uLightCt - 3),0),1) * ambiance);
+	spec += specularProduct * uLightCol[3];
+	totalSpecular += specularProduct;
+
+	// Return final color
+	rtFragColor = originalTex * mixedColors;
+	rtFragColor = vec4(rtFragColor.x,rtFragColor.y,rtFragColor.z,1.0);
+
+	//Set the correct values to the render targets
+	finalColorRenderTarget = rtFragColor;
+
+	renderTargetViewPos = passViewPosition;
+	renderTargetNormal = mVNormal + aTexCoord;
+	renderTargetTexCoord = aTexCoord;
+	renderTargetDiffuseMap = originalTex;
+	renderTargetSpecularMap = texSpec;
+
+	renderTargetDiffuseTotal = diffuseMagnifier + mixedColors;
+	renderTargetSpecularTotal = totalSpecular * spec * specularMagnifier + vec4(0.0,0.0,0.0,1.0) ;
 }
