@@ -559,7 +559,6 @@ void a3pipelines_render(a3_DemoState const* demoState, a3_Demo_Pipelines const* 
 
 	// ****TO-DO: 
 	//	-> 3.1c: repeat previous pass but using vertical axis
-	sampleAxisV = a3vec2_y;	// delete this line; variable is already initialized
 
 	currentPass = pipelines_passBlurV_2;
 	currentWriteFBO = writeFBO[currentPass];
