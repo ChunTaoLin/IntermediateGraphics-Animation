@@ -38,18 +38,18 @@ uniform sampler2D uImage03;
 layout (location = 0) out vec4 rtFragColor;
 in vec4 passTexcoord;
 
-void main()
+vec4 screen(sampler2D image01, sampler2D image02, sampler2D image03, sampler2D image04) 
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE YELLOW
-	rtFragColor = vec4(1,0,0,1);
+	vec4 color1 = texture(image01, passTexcoord.xy);
+	vec4 color2 = texture(image02, passTexcoord.xy);
+	vec4 color3 = texture(image03, passTexcoord.xy);
+	vec4 color4 = texture(image04, passTexcoord.xy);
+
+	return 1 - (1 - color1) * (1 - color2) * (1 - color3) * (1 - color4);
 }
 
-vec4 screenImages(sampler2D image01, sampler2D image02, sampler2D image03, sampler2D image4) 
-{
-	vec4 color1 = texture(image01, passTeccoord.xy);
-	vec4 color2 = texture(image02, passTeccoord.xy);
-	vec4 color3 = texture(image03, passTeccoord.xy);
-	vec4 color4 = texture(image04, passTeccoord.xy);
 
-	return color1;
+void main()
+{
+	rtFragColor = screen(uImage00,uImage01,uImage02,uImage03);
 }
