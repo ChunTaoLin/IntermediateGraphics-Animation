@@ -34,9 +34,10 @@
 // Texture Values
 uniform sampler2D uImage00;
 
-float bloom_thresh_min = 0.8;
-float bloom_thresh_max = 1.2;
-
+//float bloom_thresh_min = 0.8;
+//float bloom_thresh_max = 1.2;
+float bloom_thresh_min = 0.6;
+float bloom_thresh_max = .8;
 layout (location = 0) out vec4 rtFragColor;
 //layout (location = 8) in vec4 aTexCoord;
 in vec4 passTexcoord;
@@ -46,7 +47,7 @@ void main()
 	//sample the data with the texture of the image
 	vec3 data =  texture(uImage00,passTexcoord.xy).rgb;
 
-	float Y = dot(data, vec3(0.299, 0.587, 0.144));
+	float Y = dot(data, vec3(0.2, 0.5, 0.1));
 	
 	//then do smoothstep for a gradual change in the brightness rather than a definitive cut
 	data = data * 4.0 * smoothstep(bloom_thresh_min, bloom_thresh_max,Y);

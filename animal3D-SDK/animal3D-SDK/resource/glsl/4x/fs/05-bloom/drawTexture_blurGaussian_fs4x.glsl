@@ -38,7 +38,7 @@ in vec4 passTexcoord;
 
 layout (location = 0) out vec4 rtFragColor;
 
-const float weights[] = float[](.005,.01,.55,.2,.6);
+const float weights[] = float[](.005,.01,.55,.2,.7);
 
 /*
 This shader is responsible for performing a Gaussian blur using a 1D kernel.
@@ -60,8 +60,8 @@ void main()
 	//do the loop of the resulting pixels around the center pixel
     for(int i = 1; i < 5; i++)
     {
-		result += texture(uImage00, passTexcoord.xy + vec2(pixelWidth * i, 0.0)).rgb * weights[i];
-        result += texture(uImage00, passTexcoord.xy - vec2(pixelHeight * i, 0.0)).rgb * weights[i];
+		result += texture(uImage00, passTexcoord.xy + vec2(pixelWidth * i, 0.0)).rgb * (weights[i]);
+        result += texture(uImage00, passTexcoord.xy - vec2(pixelHeight * i, 0.0)).rgb * (weights[i]);
     }
   
 	//output final
