@@ -30,16 +30,15 @@
 //	2) implement Gaussian blur function using a 1D kernel (hint: Pascal's triangle)
 //	3) sample texture using Gaussian blur function and output result
 
+//Uniforms
 uniform sampler2D uImage00;
 uniform vec2 uSize;
 uniform vec2 uAxis;
 in vec4 passTexcoord;
+
 layout (location = 0) out vec4 rtFragColor;
 
-float bloom_thresh_min = 0.8;
-float bloom_thresh_max = 1.2;
-
-const float weights[] = float[](1,4,6,4,1);
+const float weights[] = float[](.005,.01,.55,.2,.6);
 
 /*
 This shader is responsible for performing a Gaussian blur using a 1D kernel.
@@ -49,21 +48,22 @@ The kernel weights must add up to 1 and can be determined using some row in Pasc
 
 void main()
 {
-	vec2 pixelSize = 1/16 * uAxis; 
+	//get the sample size 
 	vec2 offset = textureSize(uImage00,0);
+
+	//calculate to find width and height based on the axis
 	float pixelWidth = 1/offset.x * uAxis.x;
 	float pixelHeight = 1/offset.y* uAxis.y;
 
- vec3 result = texture(uImage00, passTexcoord.xy).rgb * weights[0]; // current fragment's contribution
-        for(int i = 1; i < 5; i++)
-        {
-//            result += texture(uImage00, passTexcoord.xy + vec2(offset.x * i, 0.0)).rgb * weights[i];
-//            result += texture(uImage00, passTexcoord.xy - vec2(offset.x * i, 0.0)).rgb * weights[i];
-			 result += texture(uImage00, passTexcoord.xy + vec2(pixelWidth * i, 0.0)).rgb * weights[i];
-            result += texture(uImage00, passTexcoord.xy - vec2(pixelHeight * i, 0.0)).rgb * weights[i];
-			
-            //result += texelFetchOffset(uImage00, passTexcoord.xy - vec2(offset.x * i, 0.0)).rgb * weights[i];
-        }
+	vec3 result = texture(uImage00, passTexcoord.xy).rgb * weights[0]; //current pixel contribution
+
+	//do the loop of the resulting pixels around the center pixel
+    for(int i = 1; i < 5; i++)
+    {
+		result += texture(uImage00, passTexcoord.xy + vec2(pixelWidth * i, 0.0)).rgb * weights[i];
+        result += texture(uImage00, passTexcoord.xy - vec2(pixelHeight * i, 0.0)).rgb * weights[i];
+    }
   
+	//output final
     rtFragColor = vec4(result, 1.0);
 }
