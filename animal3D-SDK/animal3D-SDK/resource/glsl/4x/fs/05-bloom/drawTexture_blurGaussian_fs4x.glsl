@@ -39,6 +39,7 @@ in vec4 passTexcoord;
 
 layout (location = 0) out vec4 rtFragColor;
 
+//highlighted row of pascals triangle
 const float weights[] = float[](1,4,6,4,1);
 
 /*
@@ -47,45 +48,22 @@ Implement a function to sample along the blur axis (direction of blurring), away
 The kernel weights must add up to 1 and can be determined using some row in Pascal's triangle.
 */
 
-
-
 void main()
 {
-	/*
-	
-A B C D E
-F G H I J
-L M N O P
-Q R S T U
-V W X Y Z
-Result = (L * 1 + M * 4 + N * 6 + O * 4 + P * 1) / 16
-	*/
 
+	//the center pixel
 	vec3 result = texture(uImage00, passTexcoord.xy).rgb * weights[2]; //current pixel contribution
 
-	if (uAxis == vec2(1, 0) ) 
-{
-// code h
+	//neighboring ones
+	result += texture(uImage00, passTexcoord.xy + (uSize.xy * uAxis)).rgb * weights[0];
+	result += texture(uImage00, passTexcoord.xy + (uSize.xy * uAxis)).rgb * weights[1];
+	result += texture(uImage00, passTexcoord.xy - (uSize.xy * uAxis)).rgb * weights[3];
+	result += texture(uImage00, passTexcoord.xy - (uSize.xy * uAxis)).rgb * weights[4];
 
-	result += texture(uImage00, uAxis * vec2(passTexcoord.x - uSize.x * 2, 0.0)).rgb * (weights[0]);
-	result += texture(uImage00, uAxis * vec2(passTexcoord.x - uSize.x * 1, 0.0)).rgb * (weights[1]);
-	result += texture(uImage00, uAxis * vec2(passTexcoord.x + uSize.x * 1, 0.0)).rgb * (weights[3]);
-	result += texture(uImage00, uAxis * vec2(passTexcoord.x + uSize.x * 2, 0.0)).rgb * (weights[4]);
-
-} else 
-{
-// code v
-
-	result += texture(uImage00, uAxis * vec2(passTexcoord.y - uSize.y * 2, 0.0)).rgb * (weights[0]);
-	result += texture(uImage00, uAxis * vec2(passTexcoord.y - uSize.y * 1, 0.0)).rgb * (weights[1]);
-	result += texture(uImage00, uAxis * vec2(passTexcoord.y + uSize.y * 1, 0.0)).rgb * (weights[3]);
-	result += texture(uImage00, uAxis * vec2(passTexcoord.y + uSize.y * 2, 0.0)).rgb * (weights[4]);
-}
+	//division by 16 to make kernal value wieghts add to 1
 	result /= 16;
 
-	vec4 tex = texture(uTex_dm,passTexcoord.xy);
-
 	//output final
-	result += tex.rgb;
     rtFragColor = vec4(result, 1.0);
 }
+
