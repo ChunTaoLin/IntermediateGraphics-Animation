@@ -30,14 +30,29 @@
 //	3) copy attribute data from varying to respective render targets, 
 //		transforming data accordingly
 
+/*
+since our shader does not actually calculate lighting, use the other targets for attributes.  See the HUD for the named g-buffers (we've been implicitly using them all along).
+This shader is very short; you should not be doing anything other than outputting attributes in view space, as received from the vertex shader; normalize and compress as needed.
+
+*/
 layout (location = 1) out vec4 rtViewPosition;
 layout (location = 2) out vec4 rtViewNormal;
 layout (location = 3) out vec4 rtAtlasTexcoord;
 
+uniform sampler2D uTex_sm;
+uniform sampler2D uTex_dm;
+
+
+in vbLightingData {
+	vec4 vViewPosition;
+	vec4 vViewNormal;
+	vec4 vTexcoord;
+	vec4 vBiasedClipCoord;
+};
+
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE RED, GREEN AND BLUE
-	rtViewPosition = vec4(1.0, 0.0, 0.0, 1.0);
-	rtViewNormal = vec4(0.0, 1.0, 0.0, 1.0);
-	rtAtlasTexcoord = vec4(0.0, 0.0, 1.0, 1.0);
+	rtViewPosition = vViewPosition;
+	rtViewNormal = normalize(vViewNormal);
+	rtAtlasTexcoord = vTexcoord;
 }
