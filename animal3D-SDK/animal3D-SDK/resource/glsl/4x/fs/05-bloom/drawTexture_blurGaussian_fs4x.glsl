@@ -37,6 +37,7 @@ uniform vec2 uSize;
 uniform vec2 uAxis;
 in vec4 passTexcoord;
 
+// Texture values
 layout (location = 0) out vec4 rtFragColor;
 
 //highlighted row of pascals triangle

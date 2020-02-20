@@ -30,21 +30,28 @@
 //	2) implement screen function with 4 inputs
 //	3) use screen function to sample input textures
 
+// Texture values
 uniform sampler2D uImage00;
 uniform sampler2D uImage01;
 uniform sampler2D uImage02;
 uniform sampler2D uImage03;
-
-layout (location = 0) out vec4 rtFragColor;
 in vec4 passTexcoord;
 
+// Output values
+layout (location = 0) out vec4 rtFragColor;
+
+
+
+// This function is responsible for blending 4 given textures using the screen function
 vec4 screen(sampler2D image01, sampler2D image02, sampler2D image03, sampler2D image04) 
 {
+	// Get all colors of all 4 images
 	vec4 color1 = texture(image01, passTexcoord.xy);
 	vec4 color2 = texture(image02, passTexcoord.xy);
 	vec4 color3 = texture(image03, passTexcoord.xy);
 	vec4 color4 = texture(image04, passTexcoord.xy);
 
+	// Apply screen algorithm
 	return 1 - (1 - color1) * (1 - color2) * (1 - color3) * (1 - color4);
 }
 

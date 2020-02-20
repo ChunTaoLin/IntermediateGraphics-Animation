@@ -258,9 +258,11 @@ void a3pipelines_render(a3_DemoState const* demoState, a3_Demo_Pipelines const* 
 		demoState->fbo_post_c16_2fr + 0,
 		demoState->fbo_post_c16_2fr + 1,
 		demoState->fbo_post_c16_2fr + 2,
+
 		demoState->fbo_post_c16_4fr + 0,
 		demoState->fbo_post_c16_4fr + 1,
 		demoState->fbo_post_c16_4fr + 2,
+		
 		demoState->fbo_post_c16_8fr + 0,
 		demoState->fbo_post_c16_8fr + 1,
 		demoState->fbo_post_c16_8fr + 2,
@@ -287,9 +289,11 @@ void a3pipelines_render(a3_DemoState const* demoState, a3_Demo_Pipelines const* 
 		{ demoState->fbo_post_c16_2fr + 0, 0, },
 		{ demoState->fbo_post_c16_2fr + 1, 0, },
 		{ demoState->fbo_post_c16_2fr + 2, 0, },
+		
 		{ demoState->fbo_post_c16_4fr + 0, 0, },
 		{ demoState->fbo_post_c16_4fr + 1, 0, },
 		{ demoState->fbo_post_c16_4fr + 2, 0, },
+		
 		{ demoState->fbo_post_c16_8fr + 0, 0, },
 		{ demoState->fbo_post_c16_8fr + 1, 0, },
 
@@ -528,7 +532,8 @@ void a3pipelines_render(a3_DemoState const* demoState, a3_Demo_Pipelines const* 
 	//		-> 2) bind first color texture from framebuffer used in previous pass
 	//		-> 3) draw full-screen quad (already active)
 	
-	// Half
+	// Half frame pass
+	// Do bright pass
 	currentPass = pipelines_passBright_2;
 	currentWriteFBO = writeFBO[currentPass];
 	currentReadFBO = readFBO[currentPass][0];
@@ -542,6 +547,7 @@ void a3pipelines_render(a3_DemoState const* demoState, a3_Demo_Pipelines const* 
 	a3real2Set(pixelSize.v, a3recip((a3real)currentWriteFBO->frameWidth), a3recip((a3real)currentWriteFBO->frameHeight));
 	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uSize, 1, pixelSize.v);
 	
+	// Do blur pass for both vertical and horizontal
 	currentPass = pipelines_passBlurH_2;
 	currentWriteFBO = writeFBO[currentPass];
 	currentReadFBO = readFBO[currentPass][0];
@@ -563,10 +569,11 @@ void a3pipelines_render(a3_DemoState const* demoState, a3_Demo_Pipelines const* 
 
 
 
-	// Fourth
+	// Fourth fram pass
 	currentDemoProgram = demoState->prog_drawTexture_brightPass;
 	a3shaderProgramActivate(currentDemoProgram->program);
 
+	// Do bright pass
 	currentPass = pipelines_passBright_4;
 	currentWriteFBO = writeFBO[currentPass];
 	currentReadFBO = readFBO[currentPass][0];
@@ -580,6 +587,7 @@ void a3pipelines_render(a3_DemoState const* demoState, a3_Demo_Pipelines const* 
 	a3real2Set(pixelSize.v, a3recip((a3real)currentWriteFBO->frameWidth), a3recip((a3real)currentWriteFBO->frameHeight));
 	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uSize, 1, pixelSize.v);
 
+	// Do blur pass for both vertical and horizontal
 	currentPass = pipelines_passBlurH_4;
 	currentWriteFBO = writeFBO[currentPass];
 	currentReadFBO = readFBO[currentPass][0];
@@ -601,10 +609,11 @@ void a3pipelines_render(a3_DemoState const* demoState, a3_Demo_Pipelines const* 
 
 
 
-	// Eighth
+	// Eighth frame pass
 	currentDemoProgram = demoState->prog_drawTexture_brightPass;
 	a3shaderProgramActivate(currentDemoProgram->program);
 
+	// Do bright pass
 	currentPass = pipelines_passBright_8;
 	currentWriteFBO = writeFBO[currentPass];
 	currentReadFBO = readFBO[currentPass][0];
@@ -618,6 +627,7 @@ void a3pipelines_render(a3_DemoState const* demoState, a3_Demo_Pipelines const* 
 	a3real2Set(pixelSize.v, a3recip((a3real)currentWriteFBO->frameWidth), a3recip((a3real)currentWriteFBO->frameHeight));
 	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uSize, 1, pixelSize.v);
 
+	// Do blur pass for both vertical and horizontal
 	currentPass = pipelines_passBlurV_8;
 	currentWriteFBO = writeFBO[currentPass];
 	currentReadFBO = readFBO[currentPass][0];

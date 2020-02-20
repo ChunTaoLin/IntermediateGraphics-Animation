@@ -33,12 +33,14 @@
 
 // Texture Values
 uniform sampler2D uImage00;
+in vec4 passTexcoord;
 
+// Bloom control Values
 float bloom_thresh_min = .7;
 float bloom_thresh_max = 1.2;
-layout (location = 0) out vec4 rtFragColor;
 
-in vec4 passTexcoord;
+// Output colors
+layout (location = 0) out vec4 rtFragColor;
 
 void main()
 {
