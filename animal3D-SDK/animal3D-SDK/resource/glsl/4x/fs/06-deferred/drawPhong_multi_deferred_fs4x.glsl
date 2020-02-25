@@ -41,6 +41,20 @@
 // Texture Values
 uniform sampler2D uTex_dm;
 uniform sampler2D uTex_sm;
+uniform sampler2D uImage00;
+uniform sampler2D uImage01;
+uniform sampler2D uImage02;
+uniform sampler2D uImage03;
+uniform sampler2D uImage04;
+uniform sampler2D uImage05;
+uniform sampler2D uImage06;
+uniform sampler2D uImage07;
+
+uniform mat4 uMVP;
+uniform mat4 uP;
+uniform mat4 uP_inv;
+uniform mat4 uPB;
+uniform mat4 uPB_inv;
 
 // Light Values
 uniform vec4 uLightPos[4];
@@ -61,9 +75,7 @@ float lambertianProduct;
 float specularProduct;
 float ambiance = 0.01;
 
-
-
-layout (location = 8) in vec4 aTexCoord;
+in vec4 vTexcoord;
 
 layout (location = 0) out vec4 rtFragColor;
 layout (location = 4) out vec4 rtDiffuseMapSample;
@@ -109,8 +121,12 @@ void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE CYAN (and others)
 	rtFragColor = vec4(0.0, 1.0, 1.0, 1.0);
-	rtDiffuseMapSample = texture(uTex_dm, aTexCoord.xy);
-	rtSpecularMapSample = texture(uTex_sm, aTexCoord.xy);
+	vec4 newCoord = texture(uImage03, vTexcoord.xy);
+	vec4 dm = texture(uImage04, newCoord.xy);
+	vec4 sm = texture(uImage05,newCoord.xy);
+
+	rtDiffuseMapSample = dm;
+	rtSpecularMapSample = sm;
 	rtDiffuseLightTotal = vec4(1.0, 0.0, 1.0, 1.0);
 	rtSpecularLightTotal = vec4(1.0, 1.0, 0.0, 1.0);
 

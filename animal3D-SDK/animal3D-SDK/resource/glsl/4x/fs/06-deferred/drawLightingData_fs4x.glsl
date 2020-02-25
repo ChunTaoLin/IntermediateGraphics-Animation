@@ -40,7 +40,7 @@ layout (location = 2) out vec4 rtViewNormal;
 layout (location = 3) out vec4 rtAtlasTexcoord;
 layout (location = 4) out vec4 rtDiffuseSample;
 
-uniform mat4 uAtlas;
+uniform sampler2D uImage04;
 
 in vbLightingData {
 	vec4 vViewPosition;
@@ -53,6 +53,6 @@ void main()
 {
 	rtViewPosition = vViewPosition ;
 	rtViewNormal = normalize(vViewNormal);
-	rtAtlasTexcoord = uAtlas * vTexcoord;
-	rtDiffuseSample =  normalize(vViewNormal * 0.5 + 0.5);
+	rtAtlasTexcoord = vTexcoord;
+	rtDiffuseSample = normalize(vViewNormal * 0.5 + 0.5);
 }
