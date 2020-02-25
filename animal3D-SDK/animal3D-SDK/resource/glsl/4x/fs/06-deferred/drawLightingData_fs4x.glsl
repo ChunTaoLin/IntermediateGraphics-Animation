@@ -38,10 +38,9 @@ This shader is very short; you should not be doing anything other than outputtin
 layout (location = 1) out vec4 rtViewPosition;
 layout (location = 2) out vec4 rtViewNormal;
 layout (location = 3) out vec4 rtAtlasTexcoord;
+layout (location = 4) out vec4 rtDiffuseSample;
 
-uniform sampler2D uTex_sm;
-uniform sampler2D uTex_dm;
-
+uniform mat4 uAtlas;
 
 in vbLightingData {
 	vec4 vViewPosition;
@@ -52,7 +51,8 @@ in vbLightingData {
 
 void main()
 {
-	rtViewPosition = vViewPosition;
+	rtViewPosition = vViewPosition ;
 	rtViewNormal = normalize(vViewNormal);
-	rtAtlasTexcoord = vTexcoord;
+	rtAtlasTexcoord = uAtlas * vTexcoord;
+	rtDiffuseSample =  normalize(vViewNormal * 0.5 + 0.5);
 }
