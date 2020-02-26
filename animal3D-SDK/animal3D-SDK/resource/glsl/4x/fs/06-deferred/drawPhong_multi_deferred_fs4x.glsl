@@ -156,35 +156,29 @@ void main()
 	//Specular Map Sample G buffer
 	rtSpecularMapSample = sm;
 
-	rtDiffuseLightTotal = vec4(1.0, 0.0, 1.0, 1.0);
-	rtSpecularLightTotal = vec4(1.0, 1.0, 0.0, 1.0);
-
 	// Point of the viewer
 	vec4 perspectivePosition = vec4(0,0,0,1);
 
 	// Make texture color
 	vec4 originalTex = texture(uImage04, newCoord.xy); 
 
-	// Phong shading for Light 1
-	specularProduct = min(max((uLightCt - 0),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[0]));
-	lambertianProduct = min(max((uLightCt - 0),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[0]));
-	vec4 mixedColors = uLightCol[0] * lambertianProduct + specularProduct + (min(max((uLightCt - 0),0),1) * ambiance);
+	vec4 mixedColors = vec4(0);
 
-	// Phong shading for Light 2
-	specularProduct = min(max((uLightCt - 1),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[1]));
-	lambertianProduct = min(max((uLightCt - 1),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[1]));
-	mixedColors += uLightCol[1] * lambertianProduct + specularProduct + (min(max((uLightCt - 1),0),1) * ambiance);
+	float diffuseTotal;
+	float specularTotal;
 
-	// Phong shading for Light 3
-	specularProduct = min(max((uLightCt - 2),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[2]));
-	lambertianProduct = min(max((uLightCt - 2),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[2]));
-	mixedColors += uLightCol[2] * lambertianProduct + specularProduct + (min(max((uLightCt - 2),0),1) * ambiance);
+	for(int i = 0; i < 4; i++)
+	{
+		// Phong shading for Lights
+		specularProduct = min(max((uLightCt - 0),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[i]));
+		lambertianProduct = min(max((uLightCt - 0),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[i]));
+		mixedColors += uLightCol[i] * lambertianProduct + specularProduct + (min(max((uLightCt - i),0),1) * ambiance);
+		diffuseTotal += lambertianProduct;
+		specularTotal += specularProduct;
+	}
+	rtSpecularLightTotal = vec4(1.0, 1.0, 1.0, 1.0) * specularTotal;
+	rtDiffuseLightTotal = vec4(1.0, 1.0, 1.0, 1.0) * diffuseTotal;
 
-	// Phong shading for Light 4
-	specularProduct = min(max((uLightCt - 3),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[3]));
-	lambertianProduct = min(max((uLightCt - 3),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[3]));
-	mixedColors += uLightCol[3] * lambertianProduct + specularProduct + (min(max((uLightCt - 3),0),1) * ambiance);
-	
 	// Return final color
 	rtFragColor = originalTex * mixedColors;
 }
