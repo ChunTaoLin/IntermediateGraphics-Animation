@@ -51,7 +51,7 @@ in vbLightingData {
 
 void main()
 {
-	rtViewPosition = vViewPosition ;
+	rtViewPosition = vViewPosition;
 	rtViewNormal = normalize(vViewNormal);
 	rtAtlasTexcoord = vTexcoord;
 	//This essentially clamps the normal to 0-1

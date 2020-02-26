@@ -51,9 +51,6 @@ uniform sampler2D uImage05;//specular
 uniform sampler2D uImage06;//shadowmap
 uniform sampler2D uImage07;//earth tex
 
-uniform mat4 uMVP;
-uniform mat4 uP;
-uniform mat4 uP_inv;
 uniform mat4 uPB;
 uniform mat4 uPB_inv;
 
@@ -124,10 +121,7 @@ float CalculateSpecularCoefficient(vec4 surfaceNormal, vec4 viewPos, vec4 perspe
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE CYAN (and others)
 	rtFragColor = vec4(0.0, 1.0, 1.0, 1.0);
-	vec4 worldPos = texture(uImage01, vTexcoord.xy);
-	worldPos = uPB_inv * worldPos;
 	vec4 newCoord = texture(uImage03, vTexcoord.xy);
 	vec4 dm = texture(uImage04, newCoord.xy);
 	vec4 sm = texture(uImage05,newCoord.xy);
@@ -166,18 +160,22 @@ void main()
 
 	float diffuseTotal;
 	float specularTotal;
+	vec4 spec;
 
+	// Phong shading for Lights
 	for(int i = 0; i < 4; i++)
 	{
-		// Phong shading for Lights
 		specularProduct = min(max((uLightCt - 0),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[i]));
 		lambertianProduct = min(max((uLightCt - 0),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[i]));
 		mixedColors += uLightCol[i] * lambertianProduct + specularProduct + (min(max((uLightCt - i),0),1) * ambiance);
 		diffuseTotal += lambertianProduct;
 		specularTotal += specularProduct;
+		spec += specularProduct * uLightCol[i];
 	}
-	rtSpecularLightTotal = vec4(1.0, 1.0, 1.0, 1.0) * specularTotal;
-	rtDiffuseLightTotal = vec4(1.0, 1.0, 1.0, 1.0) * diffuseTotal;
+
+	// Calculate the specular light total and the diffuse light total
+	rtSpecularLightTotal = specularTotal  * spec * specularMagnifier + vec4(0.0,0.0,0.0,1.0) ;
+	rtDiffuseLightTotal = diffuseTotal + mixedColors;
 
 	// Return final color
 	rtFragColor = originalTex * mixedColors;
