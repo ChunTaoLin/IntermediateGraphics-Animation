@@ -124,8 +124,6 @@ void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE CYAN (and others)
 	rtFragColor = vec4(0.0, 1.0, 1.0, 1.0);
-	vec4 worldPos = texture(uImage01, vTexcoord.xy);
-	worldPos = uPB_inv * worldPos;
 	vec4 newCoord = texture(uImage03, vTexcoord.xy);
 	vec4 dm = texture(uImage04, newCoord.xy);
 	vec4 sm = texture(uImage05,newCoord.xy);
@@ -167,16 +165,15 @@ void main()
 
 	vec4 spec;
 
-	for(int i = 0; i < 4; i++)
-	{
+	vec4 content = texture(uImage04,vBiasedClipCoord.xy);
+
 		// Phong shading for Lights
-		specularProduct = min(max((uLightCt - 0),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[i]));
-		lambertianProduct = min(max((uLightCt - 0),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[i]));
-		mixedColors += uLightCol[i] * lambertianProduct + specularProduct + (min(max((uLightCt - i),0),1) * ambiance);
+		specularProduct = min(max((uLightCt - 0),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[vInstanceID]));
+		lambertianProduct = min(max((uLightCt - 0),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[vInstanceID]));
+		mixedColors += uLightCol[vInstanceID] * lambertianProduct + specularProduct + (min(max((uLightCt - vInstanceID),0),1) * ambiance);
 		diffuseTotal += lambertianProduct;
 		specularTotal += specularProduct;
-		spec += specularProduct * uLightCol[i];
-	}
+		spec += specularProduct * uLightCol[vInstanceID];
 
 	rtSpecularLightTotal = specularTotal  * spec * specularMagnifier + vec4(0.0,0.0,0.0,1.0) ;
 	rtDiffuseLightTotal = diffuseTotal + mixedColors;
