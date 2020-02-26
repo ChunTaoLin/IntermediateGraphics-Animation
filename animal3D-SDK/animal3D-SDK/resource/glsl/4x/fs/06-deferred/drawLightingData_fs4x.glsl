@@ -54,5 +54,6 @@ void main()
 	rtViewPosition = vViewPosition ;
 	rtViewNormal = normalize(vViewNormal);
 	rtAtlasTexcoord = vTexcoord;
+	//This essentially clamps the normal to 0-1
 	rtDiffuseSample = normalize(vViewNormal * 0.5 + 0.5);
 }
