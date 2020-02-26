@@ -39,6 +39,7 @@
 in vec4 vTexcoord;
 
 uniform sampler2D uImage01;
+uniform sampler2D uImage02;
 uniform sampler2D uImage07;
 uniform sampler2D uImage03;//texcoord
 uniform sampler2D uImage04;//diffuse
@@ -57,12 +58,12 @@ void main()
 	vec4 diffuseSample = texture(uImage04, newCoord.xy);
 	vec4 specularSample = texture(uImage05, newCoord.xy);
 	vec4 diffuseLight = texture(uImage01, vTexcoord.xy);
-	vec4 specularLight = texture(uImage07, vTexcoord.xy);
+	vec4 specularLight = texture(uImage02, vTexcoord.xy);
 
 	// DUMMY OUTPUT: all fragments are OPAQUE YELLOW (and others)
-	rtFragColor = (diffuseSample);
-	rtDiffuseLight = diffuseLight;
-	rtSpecularLight = specularLight;
+	rtFragColor = (diffuseSample * diffuseLight) + vec4(specularSample * specularLight);
+	rtDiffuseLight = vec4(diffuseLight.rgb,1.0);
+	rtSpecularLight = vec4(specularLight.rgb,1.0);
 	rtDiffuseMapSample = diffuseSample;
 	rtSpecularMapSample = specularSample;
 }
