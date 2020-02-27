@@ -172,6 +172,6 @@ void main()
 	specularTotal = specularProduct;
 	spec = specularProduct * allLightData.lightData[vInstanceID].color;
 
-	rtSpecularLightTotal = specularTotal * spec * specularMagnifier +  allLightData.lightData[vInstanceID].color;
+	rtSpecularLightTotal = specularTotal * spec * specularMagnifier * (allLightData.lightData[vInstanceID].radiusInvSq)  + allLightData.lightData[vInstanceID].color ;
 	rtDiffuseLightTotal = diffuseMagnifier + mixedColors + allLightData.lightData[vInstanceID].color;
 }
