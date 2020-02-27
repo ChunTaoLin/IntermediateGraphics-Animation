@@ -136,6 +136,7 @@ void main()
 
 	//Normal G buffer NEEDS TWEAKING
 	rtViewNormal = texture(uImage02,vTexcoord.xy);
+	rtViewNormal = normalize(rtViewNormal * 0.5 + 0.5);
 
 	//Texcoord/atlastexcoord G buffer
 	rtAtlasCoord = texture(uImage03,vTexcoord.xy);
