@@ -138,9 +138,7 @@ void main()
 
 	//Normal G buffer NEEDS TWEAKING
 	rtViewNormal = texture(uImage02,vTexcoord.xy);
-	rtViewNormal = uPB_inv * rtViewNormal;
-	rtViewNormal = normalize(rtViewNormal * 0.5 + 0.5);
-	
+
 	//Texcoord/atlastexcoord G buffer
 	rtAtlasCoord = texture(uImage03,vTexcoord.xy);
 
@@ -165,8 +163,8 @@ void main()
 	// Phong shading for Lights
 	for(int i = 0; i < 4; i++)
 	{
-		specularProduct = min(max((uLightCt - 0),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[i]));
-		lambertianProduct = min(max((uLightCt - 0),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[i]));
+		specularProduct = min(max((uLightCt - i),0),1) * specularMagnifier * CalculateSpecularCoefficient(vNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,uLightPos[i]));
+		lambertianProduct = min(max((uLightCt - i),0),1) * diffuseMagnifier * CalculateLambertianProduct(vNormal, CalculateLightVector(rtViewPos,uLightPos[i]));
 		mixedColors += uLightCol[i] * lambertianProduct + specularProduct + (min(max((uLightCt - i),0),1) * ambiance);
 		diffuseTotal += lambertianProduct;
 		specularTotal += specularProduct;
