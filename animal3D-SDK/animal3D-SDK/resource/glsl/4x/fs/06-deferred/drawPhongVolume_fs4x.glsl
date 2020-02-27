@@ -35,12 +35,11 @@
 //			-> use reverse perspective divide for position using scene depth
 //			-> use expanded normal once sampled from normal g-buffer
 //			-> do not use texture coordinate g-buffer
-//in vbLightingData {
-	in vec4 vViewPosition;
-	in  vec4 vViewNormal;
-	in vec4 vTexcoord;
-	in vec4 vBiasedClipCoord;
-//};
+
+in vec4 vViewPosition;
+in  vec4 vViewNormal;
+in vec4 vTexcoord;
+in vec4 vBiasedClipCoord;
 
 flat in int vInstanceID;
 
@@ -81,10 +80,9 @@ float diffuseMagnifier = 0.5;
 float lambertianProduct;
 float specularProduct;
 float ambiance = 0.01;
-	float diffuseTotal;
-	float specularTotal;
-//in vec4 rtDiffuseLightTotalOut;
-//in vec4 rtSpecularTotalIn;
+float diffuseTotal;
+float specularTotal;
+
 layout (location = 0) out vec4 rtFragColor;
 layout (location = 1) out vec4 rtViewPos;
 layout (location = 2) out vec4 rtViewNormal;
@@ -148,16 +146,8 @@ uniform ubPointLight
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE CYAN (and others)
-	rtFragColor = vec4(0.0, 1.0, 1.0, 1.0);
-	vec4 newCoord = texture(uImage03, vTexcoord.xy);
-	vec4 dm = texture(uImage04, newCoord.xy);
-	vec4 sm = texture(uImage05,newCoord.xy);
 	float depth = texture(uImage00, vTexcoord.xy).x;
 	vec4 vNormal = texture(uImage02,vTexcoord.xy);
-
-	//depth buffer
-	rtFragColor = vec4(0.0, 1.0, 1.0, 1.0);
 
 	//View Pos G buffer
 	rtViewPos = vec4(vTexcoord.xy, depth,1.0);
@@ -168,21 +158,9 @@ void main()
 	rtViewNormal = texture(uImage02,vTexcoord.xy);
 	rtViewNormal = uPB_inv * rtViewNormal;
 	rtViewNormal = normalize(rtViewNormal * 0.5 + 0.5);
-	
-	//Texcoord/atlastexcoord G buffer
-	rtAtlasCoord = texture(uImage03,vTexcoord.xy);
-
-	//Diffuse Map Sample G buffer
-	rtDiffuseMapSample = dm;
-
-	//Specular Map Sample G buffer
-	rtSpecularMapSample = sm;
 
 	// Point of the viewer
 	vec4 perspectivePosition = vec4(0,0,0,1);
-
-	// Make texture color
-	vec4 originalTex = texture(uImage04, newCoord.xy); 
 
 	vec4 spec;
 
@@ -194,24 +172,6 @@ void main()
 	specularTotal = specularProduct;
 	spec = specularProduct * allLightData.lightData[vInstanceID].color;
 
-	rtSpecularLightTotal = specularTotal * spec * specularMagnifier + vec4(0.0,0.0,0.0,1.0);
+	rtSpecularLightTotal = specularTotal * spec * specularMagnifier +  allLightData.lightData[vInstanceID].color;
 	rtDiffuseLightTotal = diffuseMagnifier + mixedColors + allLightData.lightData[vInstanceID].color;
-
-	// Return final color
-	rtFragColor = originalTex * mixedColors;
 }
-
-//STuff 
-/*
-	specularProduct = min(max((uLightCt - vInstanceID),0),1) * specularMagnifier * CalculateSpecularCoefficient(rtViewNormal,allLightData.lightData[vInstanceID].worldPos, allLightData.lightData[vInstanceID].viewPos,  CalculateLightVector(allLightData.lightData[vInstanceID].worldPos,allLightData.lightData[vInstanceID].worldPos));
-	lambertianProduct = min(max((uLightCt - vInstanceID),0),1) * diffuseMagnifier * CalculateLambertianProduct(rtViewNormal, CalculateLightVector(allLightData.lightData[vInstanceID].worldPos,allLightData.lightData[vInstanceID].worldPos));
-	mixedColors = allLightData.lightData[vInstanceID].color * lambertianProduct + specularProduct + (min(max((uLightCt - vInstanceID),0),1) * ambiance);
-	diffuseTotal = lambertianProduct;
-	specularTotal = specularProduct;
-	spec = specularProduct * allLightData.lightData[vInstanceID].color;
-
-	rtSpecularLightTotal = specularTotal  * spec * specularMagnifier + vec4(0.0,0.0,0.0,1.0) ;
-	//rtDiffuseLightTotal = diffuseMagnifier  + mixedColors + uLightCol[vInstanceID] * rtViewPos  * ubo_transformMVP_light;
-	rtDiffuseLightTotal = diffuseMagnifier  + mixedColors;
-
-*/
