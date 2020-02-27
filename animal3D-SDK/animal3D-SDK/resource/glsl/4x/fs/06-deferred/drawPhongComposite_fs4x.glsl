@@ -36,16 +36,18 @@
 //					+ diffuse light * diffuse sample 
 //					+ specular light * specular sample 
 
+// texture values
 in vec4 vTexcoord;
 
+// G-buffers
 uniform sampler2D uImage01;
 uniform sampler2D uImage02;
-uniform sampler2D uImage07;
 uniform sampler2D uImage03;//texcoord
 uniform sampler2D uImage04;//diffuse
 uniform sampler2D uImage05;//specular
 uniform vec4 uColor;
 
+// ouput buffers
 layout (location = 0) out vec4 rtFragColor;
 layout (location = 4) out vec4 rtDiffuseMapSample;
 layout (location = 5) out vec4 rtSpecularMapSample;
@@ -54,12 +56,14 @@ layout (location = 7) out vec4 rtSpecularLight;
 
 void main()
 {
+	// sample G-buffers
 	vec4 newCoord = texture(uImage03, vTexcoord.xy);
 	vec4 diffuseSample = texture(uImage04, newCoord.xy);
 	vec4 specularSample = texture(uImage05, newCoord.xy);
 	vec4 diffuseLight = texture(uImage01, vTexcoord.xy);
 	vec4 specularLight = texture(uImage02, vTexcoord.xy);
-
+	
+	// Perform phong sum
 	rtFragColor = vec4(diffuseSample.rgb * diffuseLight.rgb,1.0) + vec4(specularSample.rgb * specularLight.rgb,1.0);
 	rtFragColor.a = diffuseSample.a;
 	rtDiffuseLight = vec4(diffuseLight.rgb,1.0);

@@ -39,8 +39,10 @@
 //			-> surface texture coordinate is used as-is once sampled
 
 // Texture Values
-uniform sampler2D uImage00;//depth buffer
+in vec4 vTexcoord;
+
 //g buffers
+uniform sampler2D uImage00;//depth buffer
 uniform sampler2D uImage01;//position
 uniform sampler2D uImage02;//normal
 uniform sampler2D uImage03;//texcoord
@@ -49,6 +51,7 @@ uniform sampler2D uImage05;//specular
 uniform sampler2D uImage06;//shadowmap
 uniform sampler2D uImage07;//earth tex
 
+// Matrices
 uniform mat4 uPB;
 uniform mat4 uPB_inv;
 
@@ -60,6 +63,7 @@ uniform int uLightCt;
 // Transform Values
 in vec4 passViewPosition;
 layout (location = 2) in vec4 mVNormal;
+in vec4 vViewNormal;
 
 // Magnification Values
 float specularMagnifier = .4;
@@ -71,9 +75,7 @@ float lambertianProduct;
 float specularProduct;
 float ambiance = 0.01;
 
-in vec4 vTexcoord;
-in vec4 vViewNormal;
-
+// Output buffers
 layout (location = 0) out vec4 rtFragColor;
 layout (location = 1) out vec4 rtViewPos;
 layout (location = 2) out vec4 rtViewNormal;
@@ -119,6 +121,7 @@ float CalculateSpecularCoefficient(vec4 surfaceNormal, vec4 viewPos, vec4 perspe
 
 void main()
 {
+	// Sample G-buffers
 	rtFragColor = vec4(0.0, 1.0, 1.0, 1.0);
 	vec4 newCoord = texture(uImage03, vTexcoord.xy);
 	vec4 dm = texture(uImage04, newCoord.xy);

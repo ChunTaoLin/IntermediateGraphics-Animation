@@ -36,26 +36,13 @@
 //			-> use expanded normal once sampled from normal g-buffer
 //			-> do not use texture coordinate g-buffer
 
-in vec4 vViewPosition;
-in  vec4 vViewNormal;
+// Texture Values
 in vec4 vTexcoord;
-in vec4 vBiasedClipCoord;
-
 flat in int vInstanceID;
 
-// Texture Values
-uniform sampler2D uImage00;//depth buffer
 //g buffers
-uniform sampler2D uImage01;//position
+uniform sampler2D uImage00;//depth buffer
 uniform sampler2D uImage02;//normal
-uniform sampler2D uImage03;//texcoord
-uniform sampler2D uImage04;//diffuse
-uniform sampler2D uImage05;//specular
-uniform sampler2D uImage06;//shadowmap
-uniform sampler2D uImage07;//earth tex
-
-uniform mat4 uPB;
-uniform mat4 uPB_inv;
 
 // Light Values
 uniform vec4 uLightPos[4];
@@ -63,11 +50,14 @@ uniform vec4 uLightCol[4];
 uniform int uLightCt;
 uniform vec4 uColor[4];
 
-vec4 mixedColors = vec4(0);
-
 // Transform Values
 in vec4 passViewPosition;
 layout (location = 2) in vec4 mVNormal;
+in vec4 vViewPosition;
+in  vec4 vViewNormal;
+in vec4 vBiasedClipCoord;
+uniform mat4 uPB;
+uniform mat4 uPB_inv;
 
 // Magnification Values
 float specularMagnifier = .4;
@@ -80,7 +70,9 @@ float specularProduct;
 float ambiance = 0.01;
 float diffuseTotal;
 float specularTotal;
+vec4 mixedColors = vec4(0);
 
+// Output buffers
 layout (location = 0) out vec4 rtFragColor;
 layout (location = 1) out vec4 rtViewPos;
 layout (location = 2) out vec4 rtViewNormal;

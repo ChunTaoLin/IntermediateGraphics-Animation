@@ -35,13 +35,14 @@ since our shader does not actually calculate lighting, use the other targets for
 This shader is very short; you should not be doing anything other than outputting attributes in view space, as received from the vertex shader; normalize and compress as needed.
 
 */
+
+// Output buffers
 layout (location = 1) out vec4 rtViewPosition;
 layout (location = 2) out vec4 rtViewNormal;
 layout (location = 3) out vec4 rtAtlasTexcoord;
 layout (location = 4) out vec4 rtDiffuseSample;
 
-uniform sampler2D uImage04;
-
+// Lighting data
 in vbLightingData {
 	vec4 vViewPosition;
 	vec4 vViewNormal;
@@ -51,9 +52,9 @@ in vbLightingData {
 
 void main()
 {
+	// Perform calculations and store them in G-buffers
 	rtViewPosition = vViewPosition;
 	rtViewNormal = normalize(vViewNormal);
 	rtAtlasTexcoord = vTexcoord;
-	//This essentially clamps the normal to 0-1
 	rtDiffuseSample = normalize(vViewNormal * 0.5 + 0.5);
 }
