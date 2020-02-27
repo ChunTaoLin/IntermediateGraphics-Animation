@@ -39,8 +39,6 @@
 //			-> surface texture coordinate is used as-is once sampled
 
 // Texture Values
-uniform sampler2D uTex_dm;
-uniform sampler2D uTex_sm;
 uniform sampler2D uImage00;//depth buffer
 //g buffers
 uniform sampler2D uImage01;//position

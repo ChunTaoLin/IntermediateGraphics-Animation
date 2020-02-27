@@ -60,7 +60,6 @@ void main()
 	vec4 diffuseLight = texture(uImage01, vTexcoord.xy);
 	vec4 specularLight = texture(uImage02, vTexcoord.xy);
 
-	// DUMMY OUTPUT: all fragments are OPAQUE YELLOW (and others)
 	rtFragColor = vec4(diffuseSample.rgb * diffuseLight.rgb,1.0) + vec4(specularSample.rgb * specularLight.rgb,1.0);
 	rtFragColor.a = diffuseSample.a;
 	rtDiffuseLight = vec4(diffuseLight.rgb,1.0);

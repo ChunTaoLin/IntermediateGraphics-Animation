@@ -44,8 +44,6 @@ in vec4 vBiasedClipCoord;
 flat in int vInstanceID;
 
 // Texture Values
-uniform sampler2D uTex_dm;
-uniform sampler2D uTex_sm;
 uniform sampler2D uImage00;//depth buffer
 //g buffers
 uniform sampler2D uImage01;//position
@@ -167,11 +165,11 @@ void main()
 	// Phong shading for Lights
 	specularProduct = min(max((uLightCt - vInstanceID),0),1) * specularMagnifier * CalculateSpecularCoefficient(rtViewNormal,rtViewPos, perspectivePosition,  CalculateLightVector(rtViewPos,allLightData.lightData[vInstanceID].worldPos));
 	lambertianProduct = min(max((uLightCt - vInstanceID),0),1) * diffuseMagnifier * CalculateLambertianProduct(rtViewNormal, CalculateLightVector(rtViewPos,allLightData.lightData[vInstanceID].worldPos));
-	mixedColors = allLightData.lightData[vInstanceID].color * lambertianProduct + specularProduct + (min(max((uLightCt - vInstanceID),0),1) * ambiance);
+	mixedColors = allLightData.lightData[vInstanceID].color * lambertianProduct + specularProduct + (min(max((uLightCt - vInstanceID),0),1) * pow(.5,159));
 	diffuseTotal = lambertianProduct;
 	specularTotal = specularProduct;
 	spec = specularProduct * allLightData.lightData[vInstanceID].color;
 
-	rtSpecularLightTotal = specularTotal * spec * specularMagnifier * (allLightData.lightData[vInstanceID].radiusInvSq)  + allLightData.lightData[vInstanceID].color ;
+	rtSpecularLightTotal = specularTotal * spec * specularMagnifier + allLightData.lightData[vInstanceID].color ;
 	rtDiffuseLightTotal = diffuseMagnifier + mixedColors + allLightData.lightData[vInstanceID].color;
 }
