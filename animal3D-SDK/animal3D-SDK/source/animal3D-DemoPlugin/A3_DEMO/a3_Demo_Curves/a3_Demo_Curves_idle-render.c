@@ -254,7 +254,9 @@ void a3curves_render(a3_DemoState const* demoState, a3_Demo_Curves const* demoMo
 	// forward pipeline shader programs
 	const a3_DemoStateShaderProgram* renderProgram[curves_pipeline_max][curves_render_max] = {
 		{
-			demoState->prog_drawPhong_multi_forward_mrt,
+			//demoState->prog_drawPhong_multi_forward_mrt,
+			//TESSELATION
+			demoState->prog_drawTesselation_mrt,
 		},
 	};
 
