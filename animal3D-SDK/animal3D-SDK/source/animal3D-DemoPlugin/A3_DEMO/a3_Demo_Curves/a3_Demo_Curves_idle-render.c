@@ -220,10 +220,6 @@ void a3curves_render(a3_DemoState const* demoState, a3_Demo_Curves const* demoMo
 	// temp drawable pointers
 	const a3_VertexDrawable* drawable[] = {
 		demoState->draw_plane,
-		demoState->draw_sphere,
-		demoState->draw_cylinder,
-		demoState->draw_torus,
-		demoState->draw_teapot,
 	};
 
 	// temp texture pointers
@@ -254,9 +250,7 @@ void a3curves_render(a3_DemoState const* demoState, a3_Demo_Curves const* demoMo
 	// forward pipeline shader programs
 	const a3_DemoStateShaderProgram* renderProgram[curves_pipeline_max][curves_render_max] = {
 		{
-			//demoState->prog_drawPhong_multi_forward_mrt,
-			//TESSELATION
-			demoState->prog_drawTesselation_mrt,
+			demoState->prog_drawPhong_multi_forward_mrt,
 		},
 	};
 
@@ -366,7 +360,7 @@ void a3curves_render(a3_DemoState const* demoState, a3_Demo_Curves const* demoMo
 	currentDemoProgram = demoState->prog_transform;
 	a3shaderProgramActivate(currentDemoProgram->program);
 	for (k = 0,
-		currentSceneObject = demoState->planeObject, endSceneObject = demoState->teapotObject;
+		currentSceneObject = demoState->planeObject, endSceneObject = demoState->planeObject;
 		currentSceneObject <= endSceneObject;
 		++k, ++currentSceneObject)
 		a3demo_drawModelSimple_activateModel(modelViewProjectionMat.m, activeShadowCaster->viewProjectionMat.m, currentSceneObject->modelMat.m, currentDemoProgram, drawable[k]);
@@ -441,7 +435,7 @@ void a3curves_render(a3_DemoState const* demoState, a3_Demo_Curves const* demoMo
 		//	- modelview
 		//	- modelview for normals
 		//	- per-object animation data
-		for (currentSceneObject = demoState->planeObject, endSceneObject = demoState->teapotObject,
+		for (currentSceneObject = demoState->planeObject, endSceneObject = demoState->planeObject,
 			j = (a3ui32)(currentSceneObject - demoState->sceneObject), k = 0;
 			currentSceneObject <= endSceneObject;
 			++j, ++k, ++currentSceneObject)
@@ -756,7 +750,7 @@ void a3curves_render(a3_DemoState const* demoState, a3_Demo_Curves const* demoMo
 			a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uFlag, 1, flag);
 
 			// draw objects again
-			for (currentSceneObject = demoState->planeObject, endSceneObject = demoState->teapotObject,
+			for (currentSceneObject = demoState->planeObject, endSceneObject = demoState->planeObject,
 				j = (a3ui32)(currentSceneObject - demoState->sceneObject), k = 0;
 				currentSceneObject <= endSceneObject;
 				++j, ++k, ++currentSceneObject)
@@ -845,7 +839,7 @@ void a3curves_render(a3_DemoState const* demoState, a3_Demo_Curves const* demoMo
 	if (demoState->displayObjectAxes && demoMode->pass != curves_passShadow)
 	{
 		a3_DemoSceneObject const* axesObjects[] = {
-			demoState->planeObject, demoState->sphereObject, demoState->cylinderObject, demoState->torusObject, demoState->teapotObject,
+			demoState->planeObject,
 			demoState->mainLightObject, demoState->mainCameraObject,
 			0
 		}, ** axesObjectsItr = axesObjects;

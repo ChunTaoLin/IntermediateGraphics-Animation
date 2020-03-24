@@ -432,20 +432,11 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			a3_DemoStateShader
 				passTangentBasis_transform_instanced_vs[1];
 
-			// 08-tesselation
-			a3_DemoStateShader
-				passTessTexcoord_transform_vs[1],
-				passTessLightingData_transform_vs[1];
-
 			// geometry shaders
 			// 07-curves
 			a3_DemoStateShader
 				drawCurveSegment_gs[1],
 				drawOverlays_tangents_wireframe_gs[1];
-			// 08-tesselation
-			a3_DemoStateShader
-				drawTesselationWireframe_gs[1],
-				drawTesselationSegment_gs[1];
 
 			// fragment shaders
 			// base
@@ -484,9 +475,6 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// 07-curves
 			a3_DemoStateShader
 				drawPhong_multi_forward_mrt_fs[1];
-			// 08-tesselation
-			a3_DemoStateShader
-				drawTesselationMRT_fs[1];
 		};
 	} shaderList = {
 		{
@@ -512,16 +500,11 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-vs:pass-biasedclip-inst",		a3shader_vertex  ,	1,{ A3_DEMO_VS"06-deferred/e/passBiasedClipCoord_transform_instanced_vs4x.glsl" } } },
 			// 07-curves
 			{ { { 0 },	"shdr-vs:pass-tangent-trans-inst",	a3shader_vertex  ,	1,{ A3_DEMO_VS"07-curves/passTangentBasis_transform_instanced_vs4x.glsl" } } },
-			// 08-tesselation
-			{ { { 0 },	"shdr-vs:pass-tess-inst",			a3shader_vertex  ,	1,{ A3_DEMO_VS"08-tesselation/passTangentBasis_transform_instanced_vs4x.glsl" } } },
 
 			// gs
 			// 07-curves
 			{ { { 0 },	"shdr-gs:draw-curve-segment",		a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/e/drawCurveSegment_gs4x.glsl" } } },
 			{ { { 0 },	"shdr-gs:draw-overlays-tb-wire",	a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/e/drawOverlays_tangents_wireframe_gs4x.glsl" } } },
-			// 08-Tesselation
-			{ { { 0 },	"shdr-gs:draw-Tesselation-segment",	a3shader_geometry,	1,{ A3_DEMO_GS"08-tesselation/e/drawCurveSegment_gs4x.glsl" } } },
-			{ { { 0 },	"shdr-gs:draw-Tesselation-wire",	a3shader_geometry,	1,{ A3_DEMO_GS"08-tesselation/e/drawOverlays_tangents_wireframe_gs4x.glsl" } } },
 
 			// fs
 			// base
@@ -553,8 +536,6 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-fs:draw-Phong-composite",		a3shader_fragment,	1,{ A3_DEMO_FS"06-deferred/e/drawPhongComposite_fs4x.glsl" } } },
 			// 07-curves
 			{ { { 0 },	"shdr-fs:draw-Phong-mul-fwd-mrt",	a3shader_fragment,	1,{ A3_DEMO_FS"07-curves/drawPhong_multi_forward_mrt_fs4x.glsl" } } },
-			// 08-tesselation
-			{ { { 0 },	"shdr-fs:draw-Tesselation-mrt",		a3shader_fragment,	1,{ A3_DEMO_FS"08-tesselation/drawPhong_multi_forward_mrt_fs4x.glsl" } } },
 		}
 	};
 	a3_DemoStateShader *const shaderListPtr = (a3_DemoStateShader *)(&shaderList), *shaderPtr;
@@ -735,24 +716,6 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passthru_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
-
-	// 08-tesselation programs: 
-	// draw Tesselaton forward MRT
-	currentDemoProg = demoState->prog_drawTesselation_mrt;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-Tesselation-mrt");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTessTexcoord_transform_vs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTesselationMRT_fs->shader);
-	// draw overlays (tangents & wireframe)
-	currentDemoProg = demoState->prog_drawTesselation_wireframe;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-Tesselation-wire");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTangentBasis_transform_instanced_vs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTesselationWireframe_gs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
-	//currentDemoProg = demoState->prog_drawTesselationSegment;
-	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-Tesselation-segment");
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passthru_vs->shader);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTesselationSegment_gs->shader);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
 
 	// activate a primitive for validation
 	// makes sure the specified geometry can draw using programs
