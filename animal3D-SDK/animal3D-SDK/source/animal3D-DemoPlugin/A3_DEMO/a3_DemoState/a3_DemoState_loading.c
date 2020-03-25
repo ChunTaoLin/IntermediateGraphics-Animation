@@ -438,6 +438,10 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 				drawCurveSegment_gs[1],
 				drawOverlays_tangents_wireframe_gs[1];
 
+			a3_DemoStateShader
+				tesselation_control_ts[1],
+				tesselation_evaluation_ts[1];
+
 			// fragment shaders
 			// base
 			a3_DemoStateShader
@@ -505,6 +509,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// 07-curves
 			{ { { 0 },	"shdr-gs:draw-curve-segment",		a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/e/drawCurveSegment_gs4x.glsl" } } },
 			{ { { 0 },	"shdr-gs:draw-overlays-tb-wire",	a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/e/drawOverlays_tangents_wireframe_gs4x.glsl" } } },
+
+			{ { { 0 },  "shdr-ts:tesselation-evaluation", a3shader_tessellationEvaluation, 1,{ A3_DEMO_TS"tesselation_evaluation_fs4x.glsl" }}},
+			{ { { 0 },  "shdr-ts:tesselation-control", a3shader_tessellationControl, 1,{ A3_DEMO_TS"tesselation_control_fs4x.glsl" }}},
 
 			// fs
 			// base
@@ -714,9 +721,10 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	currentDemoProg = demoState->prog_drawCurveSegment;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-curve-segment");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passthru_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
-
 	// activate a primitive for validation
 	// makes sure the specified geometry can draw using programs
 	// good idea to activate the drawable with the most attributes
