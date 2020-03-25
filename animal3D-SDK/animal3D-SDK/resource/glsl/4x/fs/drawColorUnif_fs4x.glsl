@@ -30,11 +30,12 @@
 
 uniform vec4 uColor;	// (1)
 
+//take in the float value of the perlin noise from the passthru vs
+in float noiseValue;
+
 layout (location = 0) out vec4 rtFragColor;
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE WHITE
-//	rtFragColor = vec4(1.0, 1.0, 1.0, 1.0);
-	rtFragColor = uColor;	// (2)
+	rtFragColor = vec4(noiseValue, noiseValue,noiseValue,1.0) + uColor;	// (2)
 }
