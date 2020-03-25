@@ -36,5 +36,6 @@ void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
 //	gl_Position = aPosition;
-	gl_Position = uMVP * aPosition;	// (2)
+	vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z + (mod(aPosition.z,0.1) * 20),1);
+	gl_Position = uMVP * newPos;	// (2)
 }
