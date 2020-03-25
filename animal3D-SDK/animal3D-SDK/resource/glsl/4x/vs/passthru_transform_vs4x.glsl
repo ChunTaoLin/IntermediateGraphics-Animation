@@ -35,6 +35,7 @@ layout (location = 0) in vec4 aPosition;
 
 //the out varying float value that will be passed to the fragment shader to determine color
 out float noiseValue;
+out vec4 tessPos;
 
 uniform mat4 uMVP;	// (1)
 
@@ -120,5 +121,6 @@ void main()
 	vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z + (mod(aPosition.z,0.015) * 20),1);
     noiseValue = calculatePerlinNoise(aPosition.xyz);
     newPos.a += calculatePerlinNoise(aPosition.xyz);
+    tessPos = newPos;
 	gl_Position = uMVP * newPos;	// (2)
 }
