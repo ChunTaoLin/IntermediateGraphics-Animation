@@ -122,5 +122,5 @@ void main()
     noiseValue = calculatePerlinNoise(aPosition.xyz);
     newPos.a += calculatePerlinNoise(aPosition.xyz);
     tessPos = newPos;
-	gl_Position = uMVP * newPos;	// (2)
+	gl_Position = uMVP * aPosition;//newPos;	// (2)
 }

@@ -4,15 +4,19 @@
 in float noiseValue;
 in vec4 tessPos;
 //
-struct
+//struct
+//{
+//    vec4 gl_Position;
+//    float gl_PointSize;
+//    float gl_ClipDistance[ 6 ];
+//} gl_in[];
+
+in gl_PerVertex
 {
-
-    vec4 gl_Position;
-    float gl_PointSize;
-    float gl_ClipDistance[ 6 ];
-} gl_in[];
-
-
+  vec4 gl_Position;
+  float gl_PointSize;
+  float gl_ClipDistance[];
+} gl_in[gl_MaxPatchVertices];
 //in gl_PerVertex
 //{
 //  vec4 gl_Position;
@@ -20,13 +24,18 @@ struct
 //  float gl_ClipDistance[];
 //} gl_in[];
 //
-struct
+//struct
+//{
+//    vec4 gl_Position;
+//    float gl_PointSize;
+//    float gl_ClipDistance[ 6 ];
+//} gl_out[ ];
+out gl_PerVertex
 {
-vec4 gl_Position;
-float gl_PointSize;
-float gl_ClipDistance[ 6 ];
-} gl_out[ ];
-
+  vec4 gl_Position;
+  float gl_PointSize;
+  float gl_ClipDistance[];
+} gl_out[];
 
 layout (vertices = 3) out;
 

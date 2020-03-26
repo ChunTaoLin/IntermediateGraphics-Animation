@@ -29,22 +29,27 @@
 
 #define MAX_WAYPOINTS 32
 
-//
 //struct
 //{
 //    vec4 gl_Position;
 //    float gl_PointSize;
 //    float gl_ClipDistance[ 6 ];
-//} gl_in[ ];
+//} gl_in[];
+in gl_PerVertex
+{
+  vec4 gl_Position;
+  float gl_PointSize;
+  float gl_ClipDistance[];
+} gl_in[];
 //
-//
-//struct
-//{
-//    vec4 gl_Position;
-//    float gl_PointSize;
-//    float gl_ClipDistance[ 6 ];
-//} gl_out[ ];
-//
+out gl_PerVertex
+{
+  vec4 gl_Position;
+  float gl_PointSize;
+  float gl_ClipDistance[];
+};
+out vec4 newColor;
+
 layout(triangles) in;
 layout(triangle_strip, max_vertices= 3) out;
 

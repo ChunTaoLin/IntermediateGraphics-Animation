@@ -10,6 +10,20 @@ const int foo = 3;
 //
 //uniform mat4 uMVP;	// (1)
 //
+//out gl_PerVertex {
+//  vec4 gl_Position;
+//  float gl_PointSize;
+//  float gl_ClipDistance[];
+//};
+
+in gl_PerVertex
+{
+  vec4 gl_Position;
+  float gl_PointSize;
+  float gl_ClipDistance[];
+} gl_in[gl_MaxPatchVertices];
+
+
 out gl_PerVertex {
   vec4 gl_Position;
   float gl_PointSize;
@@ -23,7 +37,7 @@ out gl_PerVertex {
 //} gl_out[ ];
 //
 #define GL_QUADS
-layout (quads) in;
+layout (triangles) in;
 
 void main(void)
 {

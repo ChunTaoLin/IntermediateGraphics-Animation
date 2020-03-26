@@ -119,6 +119,10 @@ extern "C"
 			a3i32
 				// animation uniform block handles
 				ubCurveWaypoint;	// waypoints for interpolation
+
+			a3i32
+				// animation uniform block handles
+				ubTessData;	// data for the tessellation
 		};
 	};
 
