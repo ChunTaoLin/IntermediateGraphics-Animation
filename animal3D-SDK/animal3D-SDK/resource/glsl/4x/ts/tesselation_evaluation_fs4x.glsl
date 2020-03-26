@@ -36,7 +36,7 @@ out gl_PerVertex {
 //    float gl_ClipDistance[ 6 ];
 //} gl_out[ ];
 //
-#define GL_QUADS
+
 layout (triangles) in;
 
 void main(void)

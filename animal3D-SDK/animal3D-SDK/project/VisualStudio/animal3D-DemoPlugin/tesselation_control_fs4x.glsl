@@ -41,7 +41,6 @@ layout (vertices = 3) out;
 
 void main(void)
 {
-
     gl_TessLevelInner[0] = 7.0;
     gl_TessLevelOuter[0] = 2.0;
     gl_TessLevelOuter[1] = 3.0;

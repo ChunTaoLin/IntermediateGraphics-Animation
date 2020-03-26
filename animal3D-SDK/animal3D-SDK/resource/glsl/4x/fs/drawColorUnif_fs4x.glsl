@@ -32,7 +32,7 @@ uniform vec4 uColor;	// (1)
 
 //take in the float value of the perlin noise from the passthru vs
 in float noiseValue;
-in vec4 newColor;
+
 layout (location = 0) out vec4 rtFragColor;
 
 void main()

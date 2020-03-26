@@ -36,7 +36,7 @@ layout (location = 0) in vec4 aPosition;
 //the out varying float value that will be passed to the fragment shader to determine color
 out float noiseValue;
 out vec4 tessPos;
-
+out vec4 finalPos;
 uniform mat4 uMVP;	// (1)
 
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
@@ -114,13 +114,19 @@ float calculatePerlinNoise(vec3 Point){
   return 2.2 * n_xyz;
 }
 
+out gl_PerVertex
+{
+  vec4 gl_Position;
+  float gl_PointSize;
+  float gl_ClipDistance[];
+};
+
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
 //	gl_Position = aPosition;
 	vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z + (mod(aPosition.z,0.015) * 20),1);
     noiseValue = calculatePerlinNoise(aPosition.xyz);
     newPos.a += calculatePerlinNoise(aPosition.xyz);
     tessPos = newPos;
-	gl_Position = uMVP * aPosition;//newPos;	// (2)
+	gl_Position = uMVP * newPos;	// (2)
 }

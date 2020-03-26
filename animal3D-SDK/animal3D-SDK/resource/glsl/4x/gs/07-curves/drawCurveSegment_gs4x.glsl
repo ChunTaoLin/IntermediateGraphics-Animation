@@ -48,7 +48,6 @@ out gl_PerVertex
   float gl_PointSize;
   float gl_ClipDistance[];
 };
-out vec4 newColor;
 
 layout(triangles) in;
 layout(triangle_strip, max_vertices= 3) out;
@@ -60,4 +59,3 @@ void main()
 		EmitVertex();
 		}EndPrimitive();
 }
-
