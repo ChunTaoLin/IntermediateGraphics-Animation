@@ -1,22 +1,33 @@
 #version 410 core
 const int foo = 3;
-layout (quads) in;
+//
 //struct
 //{
 //    vec4 gl_Position;
 //    float gl_PointSize;
 //    float gl_ClipDistance[ 6 ];
 //} gl_in[ ];
-
+//
 //uniform mat4 uMVP;	// (1)
 //
-void main()
+out gl_PerVertex {
+  vec4 gl_Position;
+  float gl_PointSize;
+  float gl_ClipDistance[];
+};
+//struct
+//{
+//    vec4 gl_Position;
+//    float gl_PointSize;
+//    float gl_ClipDistance[ 6 ];
+//} gl_out[ ];
+//
+#define GL_QUADS
+layout (quads) in;
+
+void main(void)
 {
-	// DUMMY OUTPUT: directly assign input position to output position
-//	gl_Position = aPosition;
-//	vec4 newPos = vec4(0,0,0,1);
-   // noiseValue = calculatePerlinNoise(newPos.xyz);
-   // newPos.a += calculatePerlinNoise(newPos.xyz);
-   // tessPos = newPos;
-   //gl_Position = uMVP * newPos;	// (2)
+    vec4 p1 = mix(gl_in[1].gl_Position,gl_in[0].gl_Position,gl_TessCoord.x);
+    vec4 p2 = mix(gl_in[2].gl_Position,gl_in[3].gl_Position,gl_TessCoord.x);
+    gl_Position = mix(p1, p2, gl_TessCoord.y);
 }

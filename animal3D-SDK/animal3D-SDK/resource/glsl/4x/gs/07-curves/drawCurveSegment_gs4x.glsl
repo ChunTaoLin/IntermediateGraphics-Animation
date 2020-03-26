@@ -1,4 +1,4 @@
-/*
+﻿	/*
 	Copyright 2011-2020 Daniel S. Buckstein
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,21 +29,30 @@
 
 #define MAX_WAYPOINTS 32
 
-// ****TO-DO: 
-//	1) add input layout specifications
-//	2) receive varying data from vertex shader
-//	3) declare uniforms: 
-//		-> model-view-projection matrix (no inbound position at all)
-//		-> flag to select curve type
-//		-> optional: segment index and count
-//		-> optional: curve color (can hard-code)
-//		-> optional: other animation data
-//	4) declare output layout specifications
-//	5) declare outbound color
-//	6) write interpolation functions to help with sampling
-//	7) select curve type and sample over [0, 1] interval
+//
+//struct
+//{
+//    vec4 gl_Position;
+//    float gl_PointSize;
+//    float gl_ClipDistance[ 6 ];
+//} gl_in[ ];
+//
+//
+//struct
+//{
+//    vec4 gl_Position;
+//    float gl_PointSize;
+//    float gl_ClipDistance[ 6 ];
+//} gl_out[ ];
+//
+layout(triangles) in;
+layout(triangle_strip, max_vertices= 3) out;
 
-void main()
+void main() 
 {
-	
+	for(int i= 0; i< 3; ++i) {
+		gl_Position = gl_in[i].gl_Position;
+		EmitVertex();
+		}EndPrimitive();
 }
+
