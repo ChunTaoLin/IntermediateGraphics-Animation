@@ -1,6 +1,7 @@
 ﻿#version 410 core
-layout(vertices = 3) out;
 const int i = 5;
+layout(vertices = 3) out;
+
 //in int gl_PatchVerticesIn;
 
 

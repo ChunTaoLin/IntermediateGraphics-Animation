@@ -1,6 +1,6 @@
 #version 410 core
-
-layout(vertices = 3) out;
+const int foo = 3;
+layout (quads) in;
 //struct
 //{
 //    vec4 gl_Position;
@@ -16,7 +16,7 @@ void main()
 //	gl_Position = aPosition;
 //	vec4 newPos = vec4(0,0,0,1);
    // noiseValue = calculatePerlinNoise(newPos.xyz);
-//    newPos.a += calculatePerlinNoise(newPos.xyz);
+   // newPos.a += calculatePerlinNoise(newPos.xyz);
    // tessPos = newPos;
-	//gl_Position = uMVP * newPos;	// (2)
+   //gl_Position = uMVP * newPos;	// (2)
 }
