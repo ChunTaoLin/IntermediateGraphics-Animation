@@ -3,13 +3,6 @@
 ////the out varying float value that will be passed to the fragment shader to determine color
 in float noiseValue;
 in vec4 tessPos;
-//
-//struct
-//{
-//    vec4 gl_Position;
-//    float gl_PointSize;
-//    float gl_ClipDistance[ 6 ];
-//} gl_in[];
 
 in gl_PerVertex
 {
@@ -17,19 +10,7 @@ in gl_PerVertex
   float gl_PointSize;
   float gl_ClipDistance[];
 } gl_in[gl_MaxPatchVertices];
-//in gl_PerVertex
-//{
-//  vec4 gl_Position;
-//  float gl_PointSize;
-//  float gl_ClipDistance[];
-//} gl_in[];
-//
-//struct
-//{
-//    vec4 gl_Position;
-//    float gl_PointSize;
-//    float gl_ClipDistance[ 6 ];
-//} gl_out[ ];
+
 out gl_PerVertex
 {
   vec4 gl_Position;

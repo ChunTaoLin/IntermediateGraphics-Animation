@@ -1,20 +1,4 @@
 #version 410 core
-const int foo = 3;
-//
-//struct
-//{
-//    vec4 gl_Position;
-//    float gl_PointSize;
-//    float gl_ClipDistance[ 6 ];
-//} gl_in[ ];
-//
-//uniform mat4 uMVP;	// (1)
-//
-//out gl_PerVertex {
-//  vec4 gl_Position;
-//  float gl_PointSize;
-//  float gl_ClipDistance[];
-//};
 
 in gl_PerVertex
 {
@@ -29,13 +13,6 @@ out gl_PerVertex {
   float gl_PointSize;
   float gl_ClipDistance[];
 };
-//struct
-//{
-//    vec4 gl_Position;
-//    float gl_PointSize;
-//    float gl_ClipDistance[ 6 ];
-//} gl_out[ ];
-//
 
 layout (triangles) in;
 

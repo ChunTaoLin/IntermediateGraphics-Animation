@@ -352,16 +352,24 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 //	a3geometryGenerateVertexArray(vao, "vao:pos+tex+nrm", proceduralShapesData + 0, vbo_ibo, sharedVertexStorage);
 	vao = demoState->vao_tangentbasis;
 	a3geometryGenerateVertexArray(vao, "vao:tangentbasis", proceduralShapesData + 0, vbo_ibo, sharedVertexStorage);
+	
+	// normally set to 4 which is triangles in opengl, but we want patches, so we manually set them to 14 to be therefore patches.
+	//	currentDrawable->primitive = 14;
 	currentDrawable = demoState->draw_plane;
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, proceduralShapesData + 0, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
+	currentDrawable->primitive = 14;
 	currentDrawable = demoState->draw_sphere;
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, proceduralShapesData + 1, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
+	currentDrawable->primitive = 14;
 	currentDrawable = demoState->draw_cylinder;
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, proceduralShapesData + 2, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
+	currentDrawable->primitive = 14;
 	currentDrawable = demoState->draw_torus;
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, proceduralShapesData + 3, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
+	currentDrawable->primitive = 14;
 	currentDrawable = demoState->draw_teapot;
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, loadedModelsData + 0, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
+	currentDrawable->primitive = 14;
 
 
 	// release data when done

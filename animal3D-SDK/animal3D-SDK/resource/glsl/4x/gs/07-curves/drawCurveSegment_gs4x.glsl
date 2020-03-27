@@ -29,12 +29,6 @@
 
 #define MAX_WAYPOINTS 32
 
-//struct
-//{
-//    vec4 gl_Position;
-//    float gl_PointSize;
-//    float gl_ClipDistance[ 6 ];
-//} gl_in[];
 in gl_PerVertex
 {
   vec4 gl_Position;
