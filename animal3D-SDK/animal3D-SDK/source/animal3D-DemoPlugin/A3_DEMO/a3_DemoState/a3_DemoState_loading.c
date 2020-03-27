@@ -371,7 +371,6 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, loadedModelsData + 0, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
 	currentDrawable->primitive = 14;
 
-
 	// release data when done
 	for (i = 0; i < displayShapesCount; ++i)
 		a3geometryReleaseData(displayShapesData + i);
@@ -423,7 +422,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 				passthru_transform_vs[1],
 				passColor_transform_vs[1],
 				passthru_transform_instanced_vs[1],
-				passColor_transform_instanced_vs[1];
+				passColor_transform_instanced_vs[1],
+				custom_passthru_trans_vs[1];
 			// 02-shading
 			a3_DemoStateShader
 				passTexcoord_transform_vs[1],
@@ -501,6 +501,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-vs:pass-col-trans",			a3shader_vertex  ,	1,{ A3_DEMO_VS"passColor_transform_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:passthru-trans-inst",		a3shader_vertex  ,	1,{ A3_DEMO_VS"passthru_transform_instanced_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:pass-col-trans-inst",		a3shader_vertex  ,	1,{ A3_DEMO_VS"passColor_transform_instanced_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:custom-passthru-trans",	a3shader_vertex  ,	1,{ A3_DEMO_VS"custom_passthru_transform_vs4x.glsl" } } },
+
 			// 02-shading
 			{ { { 0 },	"shdr-vs:pass-tex-trans",			a3shader_vertex  ,	1,{ A3_DEMO_VS"02-shading/e/passTexcoord_transform_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:pass-light-trans",			a3shader_vertex  ,	1,{ A3_DEMO_VS"02-shading/e/passLightingData_transform_vs4x.glsl" } } },
@@ -578,7 +580,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// setup programs: 
 	//	- create program object
 	//	- attach shader objects
-
+	
 	// base programs: 
 	// transform-only program
 	currentDemoProg = demoState->prog_transform;
@@ -591,7 +593,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// uniform color program
 	currentDemoProg = demoState->prog_drawColorUnif;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-unif");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passthru_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.custom_passthru_trans_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
