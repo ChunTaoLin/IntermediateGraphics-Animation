@@ -125,8 +125,14 @@ void main()
 {
 //	gl_Position = aPosition;
 	vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z + (mod(aPosition.z,0.015) * 20),1);
-    noiseValue = calculatePerlinNoise(aPosition.xyz);
-    newPos.a += calculatePerlinNoise(aPosition.xyz);
     tessPos = newPos;
-	gl_Position = uMVP * newPos;	// (2)
+
+    noiseValue = calculatePerlinNoise(aPosition.xyz);
+    tessPos.a += calculatePerlinNoise(aPosition.xyz);
+  
+    //with perlin noise
+	//gl_Position = uMVP * tessPos;	// (2)
+
+    //without perlin noise1
+    gl_Position = uMVP * newPos;	// (2)
 }
