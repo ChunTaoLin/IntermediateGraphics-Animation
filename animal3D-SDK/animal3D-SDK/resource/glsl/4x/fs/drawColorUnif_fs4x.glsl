@@ -40,8 +40,8 @@ layout (location = 0) out vec4 rtFragColor;
 vec4 texCoord;
 void main()
 {
-	texCoord = aTexCoord;
-	rtFragColor = (texCoord * -1)/3;
+	texCoord = aTexCoord / 24;
+	//rtFragColor = (texCoord * -1)/3;
 // Apply texture onto given pixel
 	rtFragColor = texture(uTex_dm,texCoord.xy);
 	//rtFragColor += vec4(noiseValue, noiseValue,noiseValue,1.0) + uColor;	// (2)
