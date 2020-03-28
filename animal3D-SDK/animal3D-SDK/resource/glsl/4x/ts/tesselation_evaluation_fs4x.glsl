@@ -22,3 +22,6 @@ void main(void)
     vec4 p2 = mix(gl_in[2].gl_Position,gl_in[3].gl_Position,gl_TessCoord.x);
     gl_Position = mix(p1, p2, gl_TessCoord.y);
 }
+
+//Testing purposes
+ //gl_Position = vec4(mix(p1, p2, gl_TessCoord.y).x,mix(p1, p2, gl_TessCoord.y).x,mix(p1, p2, gl_TessCoord.y).x,mix(p1, p2, gl_TessCoord.y).w);
