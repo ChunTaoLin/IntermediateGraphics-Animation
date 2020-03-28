@@ -124,12 +124,12 @@ void a3demo_input(a3_DemoState *demoState, a3f64 dt)
 	case demoState_shading:
 		demoState->activeCamera = demoState->demoMode_shading->activeCamera;
 		break;
-	case demoState_pipelines:
-		demoState->activeCamera = demoState->demoMode_pipelines->activeCamera;
-		break;
-	case demoState_curves:
-		demoState->activeCamera = demoState->demoMode_curves->activeCamera;
-		break;
+	//case demoState_pipelines:
+	//	demoState->activeCamera = demoState->demoMode_pipelines->activeCamera;
+	//	break;
+	//case demoState_curves:
+		//demoState->activeCamera = demoState->demoMode_curves->activeCamera;
+		//break;
 	}
 }
 
@@ -198,12 +198,12 @@ void a3demoCB_input_keyCharPress(a3_DemoState* demoState, a3i32 asciiKey)
 	case demoState_shading:
 		a3shadingCB_input_keyCharPress(demoState, demoState->demoMode_shading, asciiKey);
 		break;
-	case demoState_pipelines:
-		a3pipelinesCB_input_keyCharPress(demoState, demoState->demoMode_pipelines, asciiKey);
-		break;
-	case demoState_curves:
-		a3curvesCB_input_keyCharPress(demoState, demoState->demoMode_curves, asciiKey);
-		break;
+	//case demoState_pipelines:
+		//a3pipelinesCB_input_keyCharPress(demoState, demoState->demoMode_pipelines, asciiKey);
+		//break;
+	//case demoState_curves:
+		//a3curvesCB_input_keyCharPress(demoState, demoState->demoMode_curves, asciiKey);
+		//break;
 	}
 }
 
@@ -222,10 +222,10 @@ void a3demoCB_input_keyCharHold(a3_DemoState* demoState, a3i32 asciiKey)
 	{
 	case demoState_shading:
 		break;
-	case demoState_pipelines:
-		break;
-	case demoState_curves:
-		break;
+	//case demoState_pipelines:
+		//break;
+	//case demoState_curves:
+	//	break;
 	}
 }
 

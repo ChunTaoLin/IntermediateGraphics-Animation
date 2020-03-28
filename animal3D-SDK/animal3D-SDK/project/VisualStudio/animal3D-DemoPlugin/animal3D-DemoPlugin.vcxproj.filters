@@ -319,5 +319,8 @@
     <None Include="..\..\..\resource\glsl\4x\ts\tesselation_evaluation_fs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\ts</Filter>
     </None>
+    <None Include="..\..\..\resource\glsl\4x\vs\custom_passthru_transform_vs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\vs</Filter>
+    </None>
   </ItemGroup>
 </Project>

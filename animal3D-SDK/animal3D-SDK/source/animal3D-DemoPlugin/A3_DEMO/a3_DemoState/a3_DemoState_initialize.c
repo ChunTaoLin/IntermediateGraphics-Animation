@@ -271,12 +271,12 @@ void a3demo_initScene(a3_DemoState *demoState)
 
 	// demo modes
 	a3shading_init(demoState, demoState->demoMode_shading);
-	a3pipelines_init(demoState, demoState->demoMode_pipelines);
-	a3curves_init(demoState, demoState->demoMode_curves);
-	demoState->demoMode = demoState_curves;
+	//a3pipelines_init(demoState, demoState->demoMode_pipelines);
+	//a3curves_init(demoState, demoState->demoMode_curves);
+	demoState->demoMode = demoState_shading;
 
 	// active camera params
-	demoState->activeCamera = demoState->demoMode_pipelines->activeCamera;
+	//demoState->activeCamera = demoState->demoMode_pipelines->activeCamera;
 }
 
 // refresh non-asset scene objects (e.g. re-link pointers)
