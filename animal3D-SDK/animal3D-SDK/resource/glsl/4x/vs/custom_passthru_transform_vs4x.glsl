@@ -131,7 +131,7 @@ float calculatePerlinNoise(vec3 v)
 // Mix final noise value
   vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
   m = m * m;
-  return 2.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+  return 60.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
                                 dot(p2,x2), dot(p3,x3) ) );
   }
 
@@ -150,16 +150,14 @@ layout (location = 8) out vec4 aTexCoordOut;
 
 void main()
 {
-    aTexCoordOut = aTexCoord * uAtlas;
-	vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z + (mod(aPosition.z,0.015) * 20),1);
+    aTexCoordOut =  uAtlas * aTexCoord;
+    vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
+	
     tessPos = newPos;
 
     noiseValue = calculatePerlinNoise(aPosition.xyz);
-    tessPos.a += calculatePerlinNoise(aPosition.xyz);
+    tessPos.z += calculatePerlinNoise(aPosition.xyz);
 
     //with perlin noise
     gl_Position = uMVP * tessPos;	// (2)
-
-    //without perlin noise1
-    //gl_Position = uMVP * newPos;	// (2)
 }
