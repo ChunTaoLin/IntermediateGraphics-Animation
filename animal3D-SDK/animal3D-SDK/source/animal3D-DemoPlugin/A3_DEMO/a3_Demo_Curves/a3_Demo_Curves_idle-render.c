@@ -224,16 +224,16 @@ void a3curves_render(a3_DemoState const* demoState, a3_Demo_Curves const* demoMo
 
 	// temp texture pointers
 	const a3_Texture* texture_dm[] = {
-		demoState->tex_stone_dm,
+		demoState->tex_grass_dm,
 		demoState->tex_earth_dm,
-		demoState->tex_stone_dm,
+		demoState->tex_grass_dm,
 		demoState->tex_mars_dm,
 		demoState->tex_checker,
 	};
 	const a3_Texture* texture_sm[] = {
-		demoState->tex_stone_dm,
+		demoState->tex_grass_dm,
 		demoState->tex_earth_sm,
-		demoState->tex_stone_dm,
+		demoState->tex_grass_dm,
 		demoState->tex_mars_sm,
 		demoState->tex_checker,
 	};

@@ -163,24 +163,24 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 	// temp drawable pointers
 	const a3_VertexDrawable* drawable[] = {
 		demoState->draw_plane,
-		demoState->draw_sphere,
-		demoState->draw_cylinder,
-		demoState->draw_torus,
-		demoState->draw_teapot,
+		//demoState->draw_sphere,
+		//demoState->draw_cylinder,
+		//demoState->draw_torus,
+		//demoState->draw_teapot,
 	};
 
 	// temp texture pointers
 	const a3_Texture* texture_dm[] = {
-		demoState->tex_stone_dm,
+		demoState->tex_grass_dm,
 		demoState->tex_earth_dm,
-		demoState->tex_stone_dm,
+		demoState->tex_grass_dm,
 		demoState->tex_mars_dm,
 		demoState->tex_checker,
 	};
 	const a3_Texture* texture_sm[] = {
-		demoState->tex_stone_dm,
+		demoState->tex_grass_dm,
 		demoState->tex_earth_sm,
-		demoState->tex_stone_dm,
+		demoState->tex_grass_dm,
 		demoState->tex_mars_sm,
 		demoState->tex_checker,
 	};
@@ -333,7 +333,7 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 			//	- modelview for normals
 			//	- per-object animation data
 			for (k = 0,
-				currentSceneObject = demoState->planeObject, endSceneObject = demoState->teapotObject;
+				currentSceneObject = demoState->planeObject, endSceneObject = demoState->planeObject;
 				currentSceneObject <= endSceneObject;
 				++k, ++currentSceneObject)
 			{
@@ -468,7 +468,7 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 	if (demoState->displayObjectAxes)
 	{
 		a3_DemoSceneObject const* axesObjects[] = {
-			demoState->planeObject, demoState->sphereObject, demoState->cylinderObject, demoState->torusObject, demoState->teapotObject,
+			demoState->planeObject, demoState->sphereObject, demoState->cylinderObject, demoState->torusObject, demoState->planeObject,
 			demoState->mainLightObject, demoState->mainCameraObject,
 			0
 		}, ** axesObjectsItr = axesObjects;

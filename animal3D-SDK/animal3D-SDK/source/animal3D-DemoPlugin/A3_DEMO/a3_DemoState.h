@@ -380,7 +380,7 @@ extern "C"
 					tex_earth_sm[1],
 					tex_mars_dm[1],
 					tex_mars_sm[1],
-					tex_stone_dm[1],
+					tex_grass_dm[1],
 					tex_ramp_dm[1],
 					tex_ramp_sm[1],
 					tex_checker[1];

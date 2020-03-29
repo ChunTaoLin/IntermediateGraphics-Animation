@@ -594,9 +594,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	currentDemoProg = demoState->prog_drawColorUnif;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-unif");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.custom_passthru_trans_vs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorUnif_fs->shader);
 	// color attrib program
 	currentDemoProg = demoState->prog_drawColorAttrib;
@@ -907,7 +907,7 @@ void a3demo_loadTextures(a3_DemoState* demoState)
 			{ demoState->tex_earth_sm,		"tex:earth-sm",		"../../../../resource/tex/earth/2k/earth_sm_2k.png" },
 			{ demoState->tex_mars_dm,		"tex:mars-dm",		"../../../../resource/tex/mars/1k/mars_1k_dm.png" },
 			{ demoState->tex_mars_sm,		"tex:mars-sm",		"../../../../resource/tex/mars/1k/mars_1k_sm.png" },
-			{ demoState->tex_stone_dm,		"tex:stone-dm",		"../../../../resource/tex/stone/stone_dm.png" },
+			{ demoState->tex_grass_dm,		"tex:grass-dm",		"../../../../resource/tex/grass/grass_dm.png" },
 			{ demoState->tex_ramp_dm,		"tex:ramp-dm",		"../../../../resource/tex/sprite/celRamp_dm.png" },
 			{ demoState->tex_ramp_sm,		"tex:ramp-sm",		"../../../../resource/tex/sprite/celRamp_sm.png" },
 			{ demoState->tex_checker,		"tex:checker",		"../../../../resource/tex/sprite/checker.png" },
