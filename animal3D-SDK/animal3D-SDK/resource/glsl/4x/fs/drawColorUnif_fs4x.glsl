@@ -30,19 +30,13 @@
 
 uniform vec4 uColor;	// (1)
 uniform sampler2D uTex_dm;
-layout (location = 8) in vec4 aTexCoord;
 
-//take in the float value of the perlin noise from the passthru vs
-in float noiseValue;
+//layout (location = 8) in vec4 aTexCoord;
+out vec4 rtFragColor;
+in vec4 aTexCoord;
 
-layout (location = 0) out vec4 rtFragColor;
-
-vec4 texCoord;
 void main()
 {
-	texCoord = aTexCoord / 24;
-	//rtFragColor = (texCoord * -1)/3;
-// Apply texture onto given pixel
-	rtFragColor = texture(uTex_dm,texCoord.xy);
-	//rtFragColor += vec4(noiseValue, noiseValue,noiseValue,1.0) + uColor;	// (2)
+	// Apply texture onto given pixel
+	rtFragColor = texture(uTex_dm,aTexCoord.xy);
 }
