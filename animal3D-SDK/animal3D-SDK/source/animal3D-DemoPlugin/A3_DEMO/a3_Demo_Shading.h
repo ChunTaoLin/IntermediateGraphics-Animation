@@ -56,10 +56,6 @@ extern "C"
 	enum a3_Demo_Shading_RenderProgramName
 	{
 		shading_renderSolid,		// solid color
-		shading_renderTexture,		// texture sample
-		shading_renderLambert,		// Lambert shading
-		shading_renderPhong,		// Phong shading
-		shading_renderNonphoto,		// nonphotorealistic shading
 
 		shading_render_max
 	};
@@ -87,7 +83,6 @@ extern "C"
 	enum a3_Demo_Shading_PipelineName
 	{
 		shading_back,				// on-screen rendering with back buffer
-		shading_fbo,				// off-screen rendering with MRT FBO
 
 		shading_pipeline_max
 	};

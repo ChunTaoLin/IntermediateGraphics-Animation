@@ -54,7 +54,6 @@ void a3shading_render_controls(a3_DemoState const* demoState, a3_Demo_Shading co
 	// display mode info
 	a3byte const* pipelineText[shading_pipeline_max] = {
 		"Shading",
-		"Shading with MRT",
 	};
 	a3byte const* targetText_back[shading_target_back_max] = {
 		"Color buffer",
@@ -72,16 +71,11 @@ void a3shading_render_controls(a3_DemoState const* demoState, a3_Demo_Shading co
 	};
 	a3byte const* const* targetText[shading_pipeline_max] = {
 		targetText_back,
-		targetText_fbo,
 	};
 
 	// forward pipeline names
 	a3byte const* renderProgramName[shading_render_max] = {
-		"Solid color",
-		"Texturing",
-		"Lambert shading",
-		"Phong shading",
-		"Nonphotorealistic shading",
+		"Final color",
 	};
 
 	// forward display names
@@ -110,11 +104,6 @@ void a3shading_render_controls(a3_DemoState const* demoState, a3_Demo_Shading co
 	// lighting modes
 	a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
 		"    Rendering mode (%u / %u) ('j' | 'k'): %s", render + 1, shading_render_max, renderProgramName[render]);
-
-	// specific modes
-	if (pipeline == shading_fbo)
-		a3textDraw(demoState->text, textAlign, textOffset += textOffsetDelta, textDepth, col.r, col.g, col.b, col.a,
-			"    Display mode (%u / %u) ('J' | 'K'): %s", display + 1, shading_display_max, displayProgramName[display]);
 }
 
 
@@ -129,7 +118,7 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 	const a3_DemoPointLight* pointLight;
 
 	// framebuffers
-	const a3_Framebuffer* currentWriteFBO, * currentDisplayFBO;
+	const a3_Framebuffer* currentDisplayFBO;
 
 	// indices
 	a3ui32 i, j, k;
@@ -189,16 +178,6 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 	const a3_DemoStateShaderProgram* renderProgram[shading_pipeline_max][shading_render_max] = {
 		{
 			demoState->prog_drawColorUnif,
-			demoState->prog_drawTexture,
-			demoState->prog_drawLambert_multi,
-			demoState->prog_drawPhong_multi,
-			demoState->prog_drawNonphoto_multi,
-		}, {
-			demoState->prog_drawColorUnif,
-			demoState->prog_drawTexture_mrt,
-			demoState->prog_drawLambert_multi_mrt,
-			demoState->prog_drawPhong_multi_mrt,
-			demoState->prog_drawNonphoto_multi_mrt,
 		},
 	};
 
@@ -206,17 +185,12 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 	const a3_DemoStateShaderProgram* displayProgram[shading_pipeline_max][shading_display_max] = {
 		{
 			0,
-		}, {
-			demoState->prog_drawTexture,
-			demoState->prog_drawTexture_colorManip,
-			demoState->prog_drawTexture_coordManip,
 		},
 	};
 
 	// framebuffers to which to write based on pipeline mode
 	const a3_Framebuffer* writeFBO[shading_pipeline_max] = {
 		0,
-		demoState->fbo_scene_c16d24s8_mrt,
 	};
 
 	// target info for current pipeline mode
@@ -268,13 +242,6 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 		currentDemoProgram = demoState->displaySkybox ? demoState->prog_drawTexture : demoState->prog_drawColorUnif;
 		a3demo_drawModelTexturedColored_invertModel(modelViewProjectionMat.m, viewProjectionMat.m, demoState->skyboxObject->modelMat.m, a3mat4_identity.m, currentDemoProgram, demoState->draw_skybox, demoState->tex_skybox_clouds, skyblue);
 		glDepthFunc(GL_LEQUAL);
-		break;
-
-		// shading with MRT FBO
-	case shading_fbo:
-		// target scene framebuffer
-		currentWriteFBO = writeFBO[pipeline];
-		a3demo_setSceneState(currentWriteFBO, demoState->displaySkybox);
 		break;
 	}
 
@@ -387,20 +354,6 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 		// no framebuffer active for scene render
 	case shading_back:
 		// do nothing
-		break;
-
-		// scene was rendered to framebuffer
-	case shading_fbo:
-		// composite skybox
-		currentDemoProgram = demoState->displaySkybox ? demoState->prog_drawTexture : demoState->prog_drawColorUnif;
-		a3demo_drawModelTexturedColored_invertModel(modelViewProjectionMat.m, viewProjectionMat.m, demoState->skyboxObject->modelMat.m, a3mat4_identity.m, currentDemoProgram, demoState->draw_skybox, demoState->tex_skybox_clouds, skyblue);
-		a3demo_enableCompositeBlending();
-
-		// select output to display
-		if (currentDisplayFBO->color && (!currentDisplayFBO->depthStencil || targetIndex < targetCount - 1))
-			a3framebufferBindColorTexture(currentDisplayFBO, a3tex_unit00, targetIndex);
-		else
-			a3framebufferBindDepthTexture(currentDisplayFBO, a3tex_unit00);
 		break;
 	}
 

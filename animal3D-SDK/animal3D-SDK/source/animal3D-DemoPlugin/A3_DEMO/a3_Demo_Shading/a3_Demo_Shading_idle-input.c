@@ -58,13 +58,6 @@ void a3shadingCB_input_keyCharPress(a3_DemoState const* demoState, a3_Demo_Shadi
 	// callback for current mode
 	switch (demoMode->pipeline)
 	{
-	case shading_fbo:
-		switch (asciiKey)
-		{
-			// toggle display program
-			a3demoCtrlCasesLoop(demoMode->display, shading_display_max, 'K', 'J');
-		}
-		break;
 	}
 }
 

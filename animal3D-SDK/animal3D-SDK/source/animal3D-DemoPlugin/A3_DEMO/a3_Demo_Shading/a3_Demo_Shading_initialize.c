@@ -45,10 +45,8 @@ void a3shading_init(a3_DemoState const* demoState, a3_Demo_Shading* demoMode)
 	demoMode->pipeline = shading_back;
 
 	demoMode->targetIndex[shading_back] = shading_back_composite;
-	demoMode->targetIndex[shading_fbo] = shading_fbo_composite;
 
 	demoMode->targetCount[shading_back] = shading_target_back_max;
-	demoMode->targetCount[shading_fbo] = shading_target_fbo_max;
 }
 
 
