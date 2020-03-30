@@ -254,7 +254,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		}
 
 		// other procedurally-generated objects
-		a3proceduralCreateDescriptorBox(proceduralShapes + 0, a3geomFlag_tangents, 24.0f, 24.0f, 0.1f, 32, 32, 1);
+		a3proceduralCreateDescriptorBox(proceduralShapes + 0, a3geomFlag_tangents, 24.0f, 24.0f, 0.1f, 15, 15, 1);
 		a3proceduralCreateDescriptorSphere(proceduralShapes + 1, a3geomFlag_tangents, a3geomAxis_default, 1.0f, 32, 24);
 		a3proceduralCreateDescriptorCylinder(proceduralShapes + 2, a3geomFlag_tangents, a3geomAxis_x, 1.0f, 2.0f, 32, 1, 1);
 		a3proceduralCreateDescriptorTorus(proceduralShapes + 3, a3geomFlag_tangents, a3geomAxis_x, 1.0f, 0.25f, 32, 24);
@@ -598,7 +598,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.custom_passthru_trans_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorUnif_fs->shader);
 	// color attrib program
 	currentDemoProg = demoState->prog_drawColorAttrib;
@@ -606,7 +606,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passColor_transform_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
 	// uniform color program with instancing
 	currentDemoProg = demoState->prog_drawColorUnif_instanced;

@@ -132,7 +132,7 @@ float calculatePerlinNoise(vec3 v)
 layout (location = 0) in vec4 aPosition;
 
 //the out varying float value that will be passed to the fragment shader to determine color
-out float noiseValue;
+
 out vec4 tessPos;
 out vec4 finalPos;
 uniform mat4 uMVP;	// (1)
@@ -157,31 +157,17 @@ void main()
 
     vec4 newPos = vec4(0.0,0.0,0.0,1.0);
 
-    if (mod(aPosition.z, 1.0) > 0.1) 
+   if(mod(aPosition.z, 1.0) <= 1)
+
     {
         newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
         tessPos = newPos;
 
         tessPos.z += abs(calculatePerlinNoise(aPosition.xyz));
-        aNoiseValCS = tessPos.z;
-    }
 
+        aNoiseValCS = abs(calculatePerlinNoise(aPosition.xyz));
+    }
     //with perlin noise
     gl_Position = uMVP * uAtlas * tessPos;	// (2)
+
 }
-//
-//uniform mat4 uP;	// (1)
-//layout (location = 0) in vec4 Position_VS_in;
-//layout (location = 1) in vec4 TexCoord_VS_in;
-//layout (location = 2) in vec4 Normal_VS_in;
-//
-//out vec4 WorldPos_CS_in;
-//out vec2 TexCoord_CS_in;
-//out vec4 Normal_CS_in;
-//uniform mat4 uMVP;
-//void main()
-//{
-//    WorldPos_CS_in = (uMVP * vec4(Position_VS_in));
-//    TexCoord_CS_in = TexCoord_VS_in.xy;
-//    Normal_CS_in = (uMVP * vec4(Normal_VS_in));
-//}
