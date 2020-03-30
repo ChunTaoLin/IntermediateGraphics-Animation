@@ -30,6 +30,7 @@
 
 uniform vec4 uColor;	// (1)
 uniform sampler2D uTex_dm;
+in float aNoiseValFS;
 in float noiseValue;
 layout (location = 8) in vec4 aTexCoord;
 
@@ -41,6 +42,17 @@ void main()
 	vec4 uh = aTexCoord;
 	//uh = uMVP * uAtlas * uh;
 	// Apply texture onto given pixel
-	rtFragColor = texture(uTex_dm,aGSTexCoord.xy);
+	if (aNoiseValFS > 0.8) 
+	{
+		rtFragColor = vec4(1.0,0.0,0.0,1.0);
+	}
+	else if (aNoiseValFS > 0.5)
+	{
+		rtFragColor = vec4(0.0,1.0,0.0,1.0);
+	}
+	else 
+	{
+		rtFragColor = texture(uTex_dm,aGSTexCoord.xy) + aNoiseValFS;
+	}
 	//rtFragColor.a = noiseValue;
 }

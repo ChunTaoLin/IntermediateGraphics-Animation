@@ -149,6 +149,7 @@ float textureScalingAmount = 100;
 // Texture Values
 layout (location = 8) in vec4 aTexCoord;
 out vec2 aCSTexCoord;
+out float aNoiseValCS;
 
 void main()
 {
@@ -156,13 +157,13 @@ void main()
 
     vec4 newPos = vec4(0.0,0.0,0.0,1.0);
 
-    if (mod(aPosition.z, 1.0) >= 0.5) 
+    if (mod(aPosition.z, 1.0) > 0.1) 
     {
         newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
         tessPos = newPos;
 
-        noiseValue = abs(calculatePerlinNoise(aPosition.xyz));
         tessPos.z += abs(calculatePerlinNoise(aPosition.xyz));
+        aNoiseValCS = tessPos.z;
     }
 
     //with perlin noise

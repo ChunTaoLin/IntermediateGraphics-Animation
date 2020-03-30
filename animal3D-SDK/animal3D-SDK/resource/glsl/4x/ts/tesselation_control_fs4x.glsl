@@ -21,10 +21,13 @@ layout (vertices = 3) out;
 //layout (location = 8) in vec4 stuff;
 in vec2 aCSTexCoord[];
 out vec2 aESTexCoord[];
+in float aNoiseValCS[];
+out float aNoiseValES[];
 
 void main(void)
 {
     aESTexCoord[gl_InvocationID] = aCSTexCoord[gl_InvocationID];
+    aNoiseValES[gl_InvocationID] = aNoiseValCS[gl_InvocationID];
     gl_TessLevelInner[0] = 0.5;
     gl_TessLevelOuter[0] = 0.5;
     gl_TessLevelOuter[1] = 0.5;
