@@ -62,7 +62,7 @@ void a3demo_render_controls(a3_DemoState const* demoState,
 {
 	// display mode info
 	a3byte const* modeText[demoState_mode_max] = {
-		"LIGHTING & SHADING",
+		"Tessellation",
 	//	"LIGHTING PIPELINES",
 		//"CURVES & INTERPOLATION",
 	};

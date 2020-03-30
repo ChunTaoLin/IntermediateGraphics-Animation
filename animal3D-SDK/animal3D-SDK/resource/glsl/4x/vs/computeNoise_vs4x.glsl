@@ -1,30 +1,4 @@
-/*
-	Copyright 2011-2020 Daniel S. Buckstein
-
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
-
-		http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-*/
-
-/*
-	animal3D SDK: Minimal 3D Animation Framework
-	By Daniel S. Buckstein
-	
-	passthru_transform_vs4x.glsl
-	Pass-thru GLSL vertex shader. Outputs transformed position attribute.
-*/
-
 #version 410
-
-
 
 // Description : Array and textureless GLSL 2D/3D/4D simplex 
 //               noise functions.
@@ -129,12 +103,15 @@ float calculatePerlinNoise(vec3 v)
                                 dot(p2,x2), dot(p3,x3) ) );
   }
 
+  // End of certificate for perlin 
+
+  //
+
 layout (location = 0) in vec4 aPosition;
 
 //the out varying float value that will be passed to the fragment shader to determine color
 
 out vec4 tessPos;
-out vec4 finalPos;
 uniform mat4 uMVP;	// (1)
 out gl_PerVertex
 {
@@ -156,5 +133,5 @@ void main()
    aNoiseValCS = abs(calculatePerlinNoise(aPosition.xyz)) * isNotBottomVertex;
 
    //with perlin noise
-   gl_Position = uMVP * tessPos;	// (2)
+   gl_Position = uMVP * tessPos;
 }
