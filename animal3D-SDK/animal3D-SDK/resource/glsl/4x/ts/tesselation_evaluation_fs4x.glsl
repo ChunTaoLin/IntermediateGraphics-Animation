@@ -26,21 +26,14 @@ float interpolate1D(float v0, float v1, float v2)
 
 layout(triangles) in;
 
-// Take in tex coord and noise value from TC
-in vec2 aESTexCoord[];
+// Take in noise value from TC
 in float aNoiseValES[];
 
-// Output tex coord and noise value to GS
-out vec2 aGSTexCoord[];
+// Output noise value to GS
 out float aNoiseValFS;
 
 void main(void)
 {
-
-    //Set the array content so it can be passed to GS
-    aGSTexCoord[0] = aESTexCoord[0];
-    aGSTexCoord[1] = aESTexCoord[1];
-    aGSTexCoord[2] = aESTexCoord[2];
 
     //Interpolate noise values from TC
     aNoiseValFS = interpolate1D(aNoiseValES[0], aNoiseValES[1], aNoiseValES[2]);

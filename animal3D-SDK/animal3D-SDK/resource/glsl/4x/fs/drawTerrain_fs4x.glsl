@@ -24,15 +24,12 @@
 
 #version 410
 
-uniform vec4 uColor;	// (1)
-uniform sampler2D uTex_dm;
+float shadeOfGreen = 0.25;
 
-in vec2 aFSTexCoord;
 in float aFSNoiseVal;
-
 out vec4 rtFragColor;
 
 void main()
 {
-	rtFragColor = texture(uTex_dm,aFSTexCoord.xy) * aFSNoiseVal;
+	rtFragColor = vec4(0.0,shadeOfGreen,0.0,1.0) * aFSNoiseVal;
 }

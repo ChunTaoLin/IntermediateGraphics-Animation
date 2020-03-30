@@ -143,31 +143,18 @@ out gl_PerVertex
   float gl_ClipDistance[];
 };
 
-uniform mat4 uAtlas;
-float textureScalingAmount = 1;
-
-// Texture Values
-layout (location = 8) in vec4 aTexCoord;
-out vec2 aCSTexCoord;
 out float aNoiseValCS;
 
 void main()
 {
-    aCSTexCoord = ((uAtlas * aTexCoord) * textureScalingAmount).xy;
+   vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
+   tessPos = newPos;
 
-    vec4 newPos = vec4(0.0,0.0,0.0,1.0);
+   int isNotBottomVertex = int(mod(aPosition.z, 1.0) > 0.5);
 
-   if(mod(aPosition.z, 1.0) > 0.5)
+   tessPos.z += abs(calculatePerlinNoise(aPosition.xyz)) * isNotBottomVertex;
+   aNoiseValCS = abs(calculatePerlinNoise(aPosition.xyz)) * isNotBottomVertex;
 
-    {
-        newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
-        tessPos = newPos;
-
-        tessPos.z += abs(calculatePerlinNoise(aPosition.xyz));
-
-        aNoiseValCS = abs(calculatePerlinNoise(aPosition.xyz));
-    }
-    //with perlin noise
-    gl_Position = uMVP * uAtlas * tessPos;	// (2)
-
+   //with perlin noise
+   gl_Position = uMVP * tessPos;	// (2)
 }

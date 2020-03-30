@@ -18,15 +18,11 @@ out gl_PerVertex
 layout(triangles) in;
 layout(triangle_strip, max_vertices= 3) out;
 
-in vec2 aGSTexCoord[];
 in float aNoiseValFS[];
-
-out vec2 aFSTexCoord;
 out float aFSNoiseVal;
 
 void main() 
 {
-    aFSTexCoord = mix(aGSTexCoord[0],aGSTexCoord[1],aGSTexCoord[2]);
     aFSNoiseVal = aNoiseValFS[0] + aNoiseValFS[1] + aNoiseValFS[2];
 	for(int i= 0; i< 3; ++i) 
 	{

@@ -18,19 +18,16 @@ out gl_PerVertex
 // define the number of CPs in the output patch
 layout (vertices = 3) out;
 
-// Take in tex coord and noise value from VS
-in vec2 aCSTexCoord[];
+// Take in noise value from VS
 in float aNoiseValCS[];
 
-// Output tex coord and noise value to TE
+// Output noise value to TE
 out float aNoiseValES[];
-out vec2 aESTexCoord[];
 
 
 void main(void)
 {
     //Set tessellation levels and set data
-    aESTexCoord[gl_InvocationID] = aCSTexCoord[gl_InvocationID];
     aNoiseValES[gl_InvocationID] = aNoiseValCS[gl_InvocationID];
     gl_TessLevelInner[0] = 0.5;
     gl_TessLevelOuter[0] = 0.5;
