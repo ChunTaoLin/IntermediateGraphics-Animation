@@ -56,7 +56,7 @@ extern "C"
 	enum a3_Demo_Shading_RenderProgramName
 	{
 		shading_renderSolid,		// solid color
-
+		shading_renderTexture,
 		shading_render_max
 	};
 

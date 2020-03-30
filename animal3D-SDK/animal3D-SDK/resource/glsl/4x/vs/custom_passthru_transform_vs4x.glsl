@@ -157,7 +157,7 @@ void main()
 
     vec4 newPos = vec4(0.0,0.0,0.0,1.0);
 
-   if(mod(aPosition.z, 1.0) <= 1)
+   if(mod(aPosition.z, 1.0) > 0.5)
 
     {
         newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);

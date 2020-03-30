@@ -76,6 +76,7 @@ void a3shading_render_controls(a3_DemoState const* demoState, a3_Demo_Shading co
 	// forward pipeline names
 	a3byte const* renderProgramName[shading_render_max] = {
 		"Final color",
+		"Wireframe"
 	};
 
 	// forward display names
@@ -178,6 +179,8 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 	const a3_DemoStateShaderProgram* renderProgram[shading_pipeline_max][shading_render_max] = {
 		{
 			demoState->prog_drawColorUnif,
+			demoState->prog_drawColorAttrib,
+			
 		},
 	};
 

@@ -444,6 +444,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// 07-curves
 			a3_DemoStateShader
 				drawCurveSegment_gs[1],
+				drawWireframe_gs[1],
 				drawOverlays_tangents_wireframe_gs[1];
 
 			a3_DemoStateShader
@@ -518,6 +519,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// gs
 			// 07-curves
 			{ { { 0 },	"shdr-gs:draw-curve-segment",		a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/drawCurveSegment_gs4x.glsl" } } },
+			{ { { 0 },	"shdr-gs:draw-wire-frame",		a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/drawWireframe_gs4x.glsl" } } },
 			{ { { 0 },	"shdr-gs:draw-overlays-tb-wire",	a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/e/drawOverlays_tangents_wireframe_gs4x.glsl" } } },
 
 		
@@ -603,11 +605,11 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// color attrib program
 	currentDemoProg = demoState->prog_drawColorAttrib;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-attr");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passColor_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.custom_passthru_trans_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawWireframe_gs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorUnif_fs->shader);
 	// uniform color program with instancing
 	currentDemoProg = demoState->prog_drawColorUnif_instanced;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-unif-inst");
