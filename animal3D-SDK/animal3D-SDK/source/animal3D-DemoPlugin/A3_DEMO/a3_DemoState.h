@@ -328,8 +328,8 @@ extern "C"
 				a3_DemoStateShaderProgram
 					prog_drawColorAttrib_instanced[1],			// draw color attribute with instancing
 					prog_drawColorUnif_instanced[1],			// draw uniform color with instancing
-					prog_drawColorAttrib[1],					// draw color attribute
-					prog_drawColorUnif[1];						// draw uniform color
+					prog_drawWireframeTerrain[1],					// draw color attribute
+					prog_drawColorTerrain[1];						// draw uniform color
 				a3_DemoStateShaderProgram
 					prog_drawNonphoto_multi[1],					// draw non-photorealistic shading model, multiple lights
 					prog_drawPhong_multi[1],					// draw Phong shading model, multiple lights

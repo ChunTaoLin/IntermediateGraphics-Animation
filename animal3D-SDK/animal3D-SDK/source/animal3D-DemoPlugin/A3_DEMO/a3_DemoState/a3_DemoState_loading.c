@@ -423,7 +423,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 				passColor_transform_vs[1],
 				passthru_transform_instanced_vs[1],
 				passColor_transform_instanced_vs[1],
-				custom_passthru_trans_vs[1];
+				computeNoise_vs[1];
 			// 02-shading
 			a3_DemoStateShader
 				passTexcoord_transform_vs[1],
@@ -443,8 +443,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// geometry shaders
 			// 07-curves
 			a3_DemoStateShader
-				drawCurveSegment_gs[1],
-				drawWireframe_gs[1],
+				computeTerrainSegment_gs[1],
+				computeWireframe_gs[1],
 				drawOverlays_tangents_wireframe_gs[1];
 
 			a3_DemoStateShader
@@ -454,7 +454,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// fragment shaders
 			// base
 			a3_DemoStateShader
-				drawColorUnif_fs[1],
+				drawTerrain_fs[1],
+				drawWireframe_fs[1],
 				drawColorAttrib_fs[1];
 			// 02-shading
 			a3_DemoStateShader
@@ -502,7 +503,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-vs:pass-col-trans",			a3shader_vertex  ,	1,{ A3_DEMO_VS"passColor_transform_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:passthru-trans-inst",		a3shader_vertex  ,	1,{ A3_DEMO_VS"passthru_transform_instanced_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:pass-col-trans-inst",		a3shader_vertex  ,	1,{ A3_DEMO_VS"passColor_transform_instanced_vs4x.glsl" } } },
-			{ { { 0 },	"shdr-vs:custom-passthru-trans",	a3shader_vertex  ,	1,{ A3_DEMO_VS"custom_passthru_transform_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:compute-noise",	        a3shader_vertex  ,	1,{ A3_DEMO_VS"computeNoise_vs4x.glsl" } } },
 
 			// 02-shading
 			{ { { 0 },	"shdr-vs:pass-tex-trans",			a3shader_vertex  ,	1,{ A3_DEMO_VS"02-shading/e/passTexcoord_transform_vs4x.glsl" } } },
@@ -518,8 +519,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 
 			// gs
 			// 07-curves
-			{ { { 0 },	"shdr-gs:draw-curve-segment",		a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/drawCurveSegment_gs4x.glsl" } } },
-			{ { { 0 },	"shdr-gs:draw-wire-frame",		a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/drawWireframe_gs4x.glsl" } } },
+			{ { { 0 },	"shdr-gs:compute-terrain-segment",		a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/computeTerrainSegment_gs4x.glsl" } } },
+			{ { { 0 },	"shdr-gs:draw-wire-frame",		a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/computeWireframe_gs4x.glsl" } } },
 			{ { { 0 },	"shdr-gs:draw-overlays-tb-wire",	a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/e/drawOverlays_tangents_wireframe_gs4x.glsl" } } },
 
 		
@@ -529,7 +530,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 
 			// fs
 			// base
-			{ { { 0 },	"shdr-fs:draw-col-unif",			a3shader_fragment,	1,{ A3_DEMO_FS"drawColorUnif_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-terrain",			a3shader_fragment,	1,{ A3_DEMO_FS"drawTerrain_fs4x.glsl" } } },
+			{ { { 0 },	"shdr-fs:draw-wireframe",			a3shader_fragment,	1,{ A3_DEMO_FS"drawWireframe_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:draw-col-attr",			a3shader_fragment,	1,{ A3_DEMO_FS"drawColorAttrib_fs4x.glsl" } } },
 			// 02-shading
 			{ { { 0 },	"shdr-fs:draw-tex",					a3shader_fragment,	1,{ A3_DEMO_FS"02-shading/e/drawTexture_fs4x.glsl" } } },
@@ -595,26 +597,26 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramCreate(currentDemoProg->program, "prog:transform-inst");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passthru_transform_instanced_vs->shader);
 	// uniform color program
-	currentDemoProg = demoState->prog_drawColorUnif;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-unif");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.custom_passthru_trans_vs->shader);
+	currentDemoProg = demoState->prog_drawColorTerrain;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-terrain");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.computeNoise_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorUnif_fs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.computeTerrainSegment_gs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTerrain_fs->shader);
 	// color attrib program
-	currentDemoProg = demoState->prog_drawColorAttrib;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-attr");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.custom_passthru_trans_vs->shader);
+	currentDemoProg = demoState->prog_drawWireframeTerrain;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-wireframe");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.computeNoise_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawWireframe_gs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorUnif_fs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.computeWireframe_gs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawWireframe_fs->shader);
 	// uniform color program with instancing
 	currentDemoProg = demoState->prog_drawColorUnif_instanced;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-unif-inst");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passthru_transform_instanced_vs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorUnif_fs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTerrain_fs->shader);
 	// color attrib program with instancing
 	currentDemoProg = demoState->prog_drawColorAttrib_instanced;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-attr-inst");
@@ -743,7 +745,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passthru_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.computeTerrainSegment_gs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
 
 	// activate a primitive for validation

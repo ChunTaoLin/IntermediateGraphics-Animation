@@ -178,8 +178,8 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 	// forward pipeline shader programs
 	const a3_DemoStateShaderProgram* renderProgram[shading_pipeline_max][shading_render_max] = {
 		{
-			demoState->prog_drawColorUnif,
-			demoState->prog_drawColorAttrib,
+			demoState->prog_drawColorTerrain,
+			demoState->prog_drawWireframeTerrain,
 			
 		},
 	};
@@ -242,7 +242,7 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 		//	skybox will draw over everything otherwise
 		// change depth mode to 'always' to ensure box gets drawn and resets depth
 		glDepthFunc(GL_ALWAYS);
-		currentDemoProgram = demoState->displaySkybox ? demoState->prog_drawTexture : demoState->prog_drawColorUnif;
+		currentDemoProgram = demoState->displaySkybox ? demoState->prog_drawTexture : demoState->prog_drawColorTerrain;
 		a3demo_drawModelTexturedColored_invertModel(modelViewProjectionMat.m, viewProjectionMat.m, demoState->skyboxObject->modelMat.m, a3mat4_identity.m, currentDemoProgram, demoState->draw_skybox, demoState->tex_skybox_clouds, skyblue);
 		glDepthFunc(GL_LEQUAL);
 		break;
@@ -252,7 +252,7 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 	// optional stencil test before drawing objects
 	a3real4x4SetScale(modelMat.m, a3real_four);
 	if (demoState->stencilTest)
-		a3demo_drawStencilTest(modelViewProjectionMat.m, viewProjectionMat.m, modelMat.m, demoState->prog_drawColorUnif, demoState->draw_sphere);
+		a3demo_drawStencilTest(modelViewProjectionMat.m, viewProjectionMat.m, modelMat.m, demoState->prog_drawColorTerrain, demoState->draw_sphere);
 
 
 	// copy temp light data
@@ -324,7 +324,7 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 
 	// draw grid aligned to world
 	if (demoState->displayGrid)
-		a3demo_drawModelSolidColor(modelViewProjectionMat.m, viewProjectionMat.m, demoState->gridTransform.m, demoState->prog_drawColorUnif, demoState->draw_grid, demoState->gridColor.v);
+		a3demo_drawModelSolidColor(modelViewProjectionMat.m, viewProjectionMat.m, demoState->gridTransform.m, demoState->prog_drawColorTerrain, demoState->draw_grid, demoState->gridColor.v);
 
 
 	//-------------------------------------------------------------------------
@@ -391,7 +391,7 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 		glCullFace(GL_FRONT);
 
 		// draw light volumes
-		currentDemoProgram = demoState->prog_drawColorUnif;
+		currentDemoProgram = demoState->prog_drawColorTerrain;
 		a3shaderProgramActivate(currentDemoProgram->program);
 		a3vertexDrawableActivate(demoState->draw_pointlight);
 		for (k = 0; k < demoState->forwardLightCount; ++k)
@@ -408,7 +408,7 @@ void a3shading_render(a3_DemoState const* demoState, a3_Demo_Shading const* demo
 
 	// superimpose axes
 	// draw coordinate axes in front of everything
-	currentDemoProgram = demoState->prog_drawColorAttrib;
+	currentDemoProgram = demoState->prog_drawWireframeTerrain;
 	a3shaderProgramActivate(currentDemoProgram->program);
 	a3vertexDrawableActivate(demoState->draw_axes);
 

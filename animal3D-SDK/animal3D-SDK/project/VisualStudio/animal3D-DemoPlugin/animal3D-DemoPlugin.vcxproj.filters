@@ -205,9 +205,6 @@
     <None Include="..\..\..\resource\glsl\4x\fs\drawColorAttrib_fs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\fs</Filter>
     </None>
-    <None Include="..\..\..\resource\glsl\4x\fs\drawColorUnif_fs4x.glsl">
-      <Filter>Resource Files\A3_DEMO\glsl\4x\fs</Filter>
-    </None>
     <None Include="..\..\..\resource\glsl\4x\vs\passColor_transform_vs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\vs</Filter>
     </None>
@@ -310,20 +307,26 @@
     <None Include="..\..\..\resource\glsl\4x\gs\07-curves\drawOverlays_tangents_wireframe_gs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\gs\07-curves</Filter>
     </None>
-    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\drawCurveSegment_gs4x.glsl">
-      <Filter>Resource Files\A3_DEMO\glsl\4x\gs\07-curves</Filter>
-    </None>
-    <None Include="..\..\..\resource\glsl\4x\vs\custom_passthru_transform_vs4x.glsl">
-      <Filter>Resource Files\A3_DEMO\glsl\4x\vs</Filter>
-    </None>
     <None Include="..\..\..\resource\glsl\4x\ts\tesselation_control_fs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\ts</Filter>
     </None>
     <None Include="..\..\..\resource\glsl\4x\ts\tesselation_evaluation_fs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\ts</Filter>
     </None>
-    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\drawWireframe_gs4x.glsl">
+    <None Include="..\..\..\resource\glsl\4x\fs\drawWireframe_fs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\fs</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\computeWireframe_gs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\gs\07-curves</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\fs\drawTerrain_fs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\fs</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\gs\07-curves\computeTerrainSegment_gs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\gs\07-curves</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\vs\computeNoise_vs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\vs</Filter>
     </None>
   </ItemGroup>
 </Project>
