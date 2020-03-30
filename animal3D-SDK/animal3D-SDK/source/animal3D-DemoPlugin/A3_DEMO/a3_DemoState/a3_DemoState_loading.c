@@ -520,8 +520,10 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-gs:draw-curve-segment",		a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/drawCurveSegment_gs4x.glsl" } } },
 			{ { { 0 },	"shdr-gs:draw-overlays-tb-wire",	a3shader_geometry,	1,{ A3_DEMO_GS"07-curves/e/drawOverlays_tangents_wireframe_gs4x.glsl" } } },
 
-			{ { { 0 },  "shdr-ts:tesselation-evaluation", a3shader_tessellationEvaluation, 1,{ A3_DEMO_TS"tesselation_evaluation_fs4x.glsl" }}},
-			{ { { 0 },  "shdr-ts:tesselation-control", a3shader_tessellationControl, 1,{ A3_DEMO_TS"tesselation_control_fs4x.glsl" }}},
+		
+			//ts
+			{ { { 0 },  "shdr-ts:tesselation-evaluation",	a3shader_tessellationEvaluation, 1,{ A3_DEMO_TS"tesselation_evaluation_fs4x.glsl" }}},
+			{ { { 0 },  "shdr-ts:tesselation-control",		a3shader_tessellationControl, 1,{ A3_DEMO_TS"tesselation_control_fs4x.glsl" }}},
 
 			// fs
 			// base
@@ -594,9 +596,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	currentDemoProg = demoState->prog_drawColorUnif;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-col-unif");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.custom_passthru_trans_vs->shader);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_control_ts->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.tesselation_evaluation_ts->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCurveSegment_gs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorUnif_fs->shader);
 	// color attrib program
 	currentDemoProg = demoState->prog_drawColorAttrib;
