@@ -111,8 +111,9 @@ layout (location = 0) in vec4 aPosition;
 
 //the out varying float value that will be passed to the fragment shader to determine color
 
-out vec4 tessPos;
 uniform mat4 uMVP;	// (1)
+
+// Output vertex
 out gl_PerVertex
 {
   vec4 gl_Position;
@@ -120,18 +121,18 @@ out gl_PerVertex
   float gl_ClipDistance[];
 };
 
+// Output noise value
 out float aNoiseValCS;
 
 void main()
 {
-   vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
-   tessPos = newPos;
+   vec4 tessPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
 
+   // Calculate Perlin noise and apply to position
    int isNotBottomVertex = int(mod(aPosition.z, 1.0) > 0.5);
-
    tessPos.z += abs(calculatePerlinNoise(aPosition.xyz)) * isNotBottomVertex;
    aNoiseValCS = abs(calculatePerlinNoise(aPosition.xyz)) * isNotBottomVertex;
 
-   //with perlin noise
-   gl_Position = uMVP * tessPos;
+   //Output position
+   gl_Position = uMVP * tessPos;	// (2)
 }

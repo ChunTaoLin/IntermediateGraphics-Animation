@@ -1,11 +1,15 @@
 #version 410
 
-float shadeOfGreen = 0.25;
+// Constants
+const float SHADE_OF_GREEN = 0.25;
 
+// Input noise value
 in float aFSNoiseVal;
+
 out vec4 rtFragColor;
 
 void main()
-{
-	rtFragColor = vec4(0.0,shadeOfGreen,0.0,1.0) * aFSNoiseVal;
+{	
+	// Amplify shade of green with noise value
+	rtFragColor = vec4(0.0,SHADE_OF_GREEN,0.0,1.0) * aFSNoiseVal;
 }
