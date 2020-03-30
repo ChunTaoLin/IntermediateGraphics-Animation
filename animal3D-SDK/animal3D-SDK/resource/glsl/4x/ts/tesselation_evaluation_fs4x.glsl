@@ -1,5 +1,6 @@
 #version 410 core
 
+// Input patch
 in gl_PerVertex
 {
   vec4 gl_Position;
@@ -7,18 +8,14 @@ in gl_PerVertex
   float gl_ClipDistance[];
 } gl_in[gl_MaxPatchVertices];
 
-
+// Output Vertex
 out gl_PerVertex {
   vec4 gl_Position;
   float gl_PointSize;
   float gl_ClipDistance[];
 };
 
-vec2 interpolate2D(vec2 v0, vec2 v1, vec2 v2)
-{
-    return vec2(gl_TessCoord.x) * v0 + vec2(gl_TessCoord.y) * v1 + vec2(gl_TessCoord.z) * v2;
-}
-
+// This function interpolates a given float
 float interpolate1D(float v0, float v1, float v2) 
 {
     return float(gl_TessCoord.x) * v0 + float(gl_TessCoord.y) * v1 + float(gl_TessCoord.z) * v2;

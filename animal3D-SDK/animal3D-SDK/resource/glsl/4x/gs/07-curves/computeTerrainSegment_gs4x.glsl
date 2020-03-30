@@ -1,12 +1,14 @@
 ﻿#version 430
 
+// Input vertex
 in gl_PerVertex
 {
   vec4 gl_Position;
   float gl_PointSize;
   float gl_ClipDistance[];
 } gl_in[];
-//
+
+// Output vertex
 out gl_PerVertex
 {
   vec4 gl_Position;
@@ -18,13 +20,17 @@ out gl_PerVertex
 layout(triangles) in;
 layout(triangle_strip, max_vertices= 3) out;
 
+// Input / Output noise values
 in float aNoiseValFS[];
 out float aFSNoiseVal;
 
 void main() 
 {
+    // Calculate noise value for FS
     aFSNoiseVal = aNoiseValFS[0] + aNoiseValFS[1] + aNoiseValFS[2];
-	for(int i= 0; i< 3; ++i) 
+	
+    // Emit all vertices
+    for(int i= 0; i< 3; ++i) 
 	{
 	    gl_Position =  gl_in[i].gl_Position;     
     EmitVertex();

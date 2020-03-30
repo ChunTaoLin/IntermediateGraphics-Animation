@@ -8,6 +8,7 @@ in gl_PerVertex
   float gl_ClipDistance[];
 } gl_in[gl_MaxPatchVertices];
 
+// Output patch
 out gl_PerVertex
 {
   vec4 gl_Position;
