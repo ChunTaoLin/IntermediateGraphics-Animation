@@ -45,17 +45,18 @@ out gl_PerVertex
 
 layout(triangles) in;
 layout(triangle_strip, max_vertices= 3) out;
+//in vec2 aGSTexCoord;
+//out vec2 aFSTexCoord;
 
-uniform mat4 uAtlas;
-out vec4 aTexCoord;
 void main() 
 {
+    //aFSTexCoord = aGSTexCoord;
 	for(int i= 0; i< 3; ++i) 
 	{
-		aTexCoord = gl_in[i].gl_Position;
-		gl_Position = aTexCoord;
+		//aTexCoord = gl_in[i].gl_Position;
+		//gl_Position = aTexCoord;
 
-		//gl_Position =  gl_in[i].gl_Position;
+		gl_Position =  gl_in[i].gl_Position;
 
     EmitVertex();
 	}EndPrimitive();				

@@ -144,6 +144,7 @@ out gl_PerVertex
 };
 
 uniform mat4 uAtlas;
+float textureScalingAmount = 10;
 
 // Texture Values
 layout (location = 8) in vec4 aTexCoord;
@@ -151,7 +152,7 @@ out vec2 aCSTexCoord;
 
 void main()
 {
-    aCSTexCoord = (uAtlas * aTexCoord).xy;
+    aCSTexCoord = ((uAtlas * aTexCoord) * textureScalingAmount).xy;
 
     vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
 	
