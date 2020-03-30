@@ -24,41 +24,15 @@
 
 #version 410
 
-// ****TO-DO: 
-//	1) declare uniform variable for color; see demo code for hints
-//	2) assign uniform variable to output color
-
 uniform vec4 uColor;	// (1)
 uniform sampler2D uTex_dm;
-in float aNoiseValFS;
-in float noiseValue;
-layout (location = 8) in vec4 aTexCoord;
+
+in vec2 aFSTexCoord;
+in float aFSNoiseVal;
 
 out vec4 rtFragColor;
-in vec2 aGSTexCoord;
-in vec2 aFSTexCoord;
-in float aFSNoiseValue;
-in vec2 TexCoord_FS_in;
-in float aFSNoiseVal;
-in vec3 WorldPos_FS_in;
-in vec3 Normal_FS_in;
 
 void main()
 {
-	vec4 uh = aTexCoord;
-	//uh = uMVP * uAtlas * uh;
-	// Apply texture onto given pixel
-//	if (aNoiseValFS > 0.8) 
-//	{
-//		rtFragColor = vec4(1.0,0.0,0.0,1.0);
-//	}
-//	else if (aNoiseValFS > 0.5)
-//	{
-//		rtFragColor = vec4(0.0,1.0,0.0,1.0);
-//	}
-	//else 
-	{
-		//rtFragColor = texture(uTex_dm,aGSTexCoord.xy) + aNoiseValFS;
-	}
 	rtFragColor = texture(uTex_dm,aFSTexCoord.xy) * aFSNoiseVal;
 }

@@ -45,19 +45,20 @@ out gl_PerVertex
 
 layout(triangles) in;
 layout(line_strip, max_vertices= 3) out;
-in vec2 aGSTexCoord[];
-out vec2 aFSTexCoord;
+
 in float aNoiseValFS[];
+in vec2 aGSTexCoord[];
+
 out float aFSNoiseVal;
+out vec2 aFSTexCoord;
 
 void main() 
 {
-    //
+   aFSTexCoord = mix(aGSTexCoord[0],aGSTexCoord[1],aGSTexCoord[2]);
     aFSNoiseVal = aNoiseValFS[0] + aNoiseValFS[1] + aNoiseValFS[2];
 	for(int i= 0; i< 3; ++i) 
 	{
-	    gl_Position =  gl_in[i].gl_Position;
-        aFSTexCoord = mix(aGSTexCoord[0],aGSTexCoord[1],aGSTexCoord[2]);
+	    gl_Position =  gl_in[i].gl_Position;     
     EmitVertex();
-	}EndPrimitive();				
+	}EndPrimitive();	
 }
