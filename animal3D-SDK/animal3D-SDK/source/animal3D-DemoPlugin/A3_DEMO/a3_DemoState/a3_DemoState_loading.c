@@ -254,7 +254,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 		}
 
 		// other procedurally-generated objects
-		a3proceduralCreateDescriptorBox(proceduralShapes + 0, a3geomFlag_tangents, 24.0f, 24.0f, 1.0f, 32, 12, 12);
+		a3proceduralCreateDescriptorBox(proceduralShapes + 0, a3geomFlag_tangents, 24.0f, 24.0f, 0.1f, 32, 12, 1);
 		a3proceduralCreateDescriptorSphere(proceduralShapes + 1, a3geomFlag_tangents, a3geomAxis_default, 1.0f, 32, 24);
 		a3proceduralCreateDescriptorCylinder(proceduralShapes + 2, a3geomFlag_tangents, a3geomAxis_x, 1.0f, 2.0f, 32, 1, 1);
 		a3proceduralCreateDescriptorTorus(proceduralShapes + 3, a3geomFlag_tangents, a3geomAxis_x, 1.0f, 0.25f, 32, 24);

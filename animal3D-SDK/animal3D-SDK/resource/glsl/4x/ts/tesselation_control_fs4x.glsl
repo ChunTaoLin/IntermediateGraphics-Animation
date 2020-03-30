@@ -25,12 +25,10 @@ out vec2 aESTexCoord[];
 void main(void)
 {
     aESTexCoord[gl_InvocationID] = aCSTexCoord[gl_InvocationID];
-    gl_TessLevelInner[0] = 7.0;
-    gl_TessLevelOuter[0] = 2.0;
-    gl_TessLevelOuter[1] = 3.0;
-    gl_TessLevelOuter[2] = 7.0;
-    gl_TessLevelInner[1] = 5.0;
-    gl_TessLevelOuter[3] = 7.0;
+    gl_TessLevelInner[0] = 0.5;
+    gl_TessLevelOuter[0] = 0.5;
+    gl_TessLevelOuter[1] = 0.5;
+    gl_TessLevelOuter[2] = 0.5;
 //in case of quad, you have to specify both gl_TessLevelInner[1] and //gl_TessLevelOuter[3]
   //  } 
     gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;

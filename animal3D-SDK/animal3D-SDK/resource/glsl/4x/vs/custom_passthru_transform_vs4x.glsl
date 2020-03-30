@@ -144,7 +144,7 @@ out gl_PerVertex
 };
 
 uniform mat4 uAtlas;
-float textureScalingAmount = 10;
+float textureScalingAmount = 20;
 
 // Texture Values
 layout (location = 8) in vec4 aTexCoord;
@@ -154,12 +154,16 @@ void main()
 {
     aCSTexCoord = ((uAtlas * aTexCoord) * textureScalingAmount).xy;
 
-    vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
-	
-    tessPos = newPos;
+    vec4 newPos = vec4(0.0,0.0,0.0,1.0);
 
-    noiseValue = calculatePerlinNoise(aPosition.xyz);
-    tessPos.z += calculatePerlinNoise(aPosition.xyz);
+    if (mod(aPosition.z, 1.0) >= 0.5) 
+    {
+        newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
+        tessPos = newPos;
+
+        noiseValue = abs(calculatePerlinNoise(aPosition.xyz));
+        tessPos.z += abs(calculatePerlinNoise(aPosition.xyz));
+    }
 
     //with perlin noise
     gl_Position = uMVP * uAtlas * tessPos;	// (2)
