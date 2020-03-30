@@ -144,7 +144,7 @@ out gl_PerVertex
 };
 
 uniform mat4 uAtlas;
-float textureScalingAmount = 20;
+float textureScalingAmount = 100;
 
 // Texture Values
 layout (location = 8) in vec4 aTexCoord;
