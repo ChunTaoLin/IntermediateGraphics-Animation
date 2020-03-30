@@ -28,11 +28,15 @@ layout(triangles) in;
 
 in vec2 aESTexCoord[];
 in float aNoiseValES[];
-out vec2 aGSTexCoord;
+out vec2 aGSTexCoord[];
 out float aNoiseValFS;
 void main(void)
 {
-    aGSTexCoord = interpolate2D(aESTexCoord[0], aESTexCoord[1], aESTexCoord[2]);
+aGSTexCoord[0] = aESTexCoord[0];
+aGSTexCoord[1] = aESTexCoord[1];
+aGSTexCoord[2] = aESTexCoord[2];
+
+   // aGSTexCoord = interpolate2D(aESTexCoord[0], aESTexCoord[1], aESTexCoord[2]);
     aNoiseValFS = interpolate1D(aNoiseValES[0], aNoiseValES[1], aNoiseValES[2]);
     vec4 p1 = mix(gl_in[1].gl_Position,gl_in[0].gl_Position,gl_TessCoord.x);
     vec4 p2 = mix(gl_in[2].gl_Position,gl_in[3].gl_Position,gl_TessCoord.x);

@@ -52,12 +52,12 @@ out float aFSNoiseVal;
 
 void main() 
 {
-    aFSTexCoord = aGSTexCoord[0] + aGSTexCoord[1] + aGSTexCoord[2];
+    //
     aFSNoiseVal = aNoiseValFS[0] + aNoiseValFS[1] + aNoiseValFS[2];
 	for(int i= 0; i< 3; ++i) 
 	{
-		gl_Position =  gl_in[i].gl_Position;
-
+	    gl_Position =  gl_in[i].gl_Position;
+        aFSTexCoord = mix(aGSTexCoord[0],aGSTexCoord[1],aGSTexCoord[2]);
     EmitVertex();
 	}EndPrimitive();				
 }
