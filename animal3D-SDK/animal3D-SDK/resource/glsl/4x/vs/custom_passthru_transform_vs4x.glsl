@@ -146,12 +146,12 @@ out gl_PerVertex
 uniform mat4 uAtlas;
 
 // Texture Values
-layout (location = 1) in vec4 aTexCoord;
-layout (location = 1) out vec4 aTexCoordOut;
+layout (location = 8) in vec4 aTexCoord;
+out vec2 aCSTexCoord;
 
 void main()
 {
-    aTexCoordOut = uAtlas * aTexCoord;
+    aCSTexCoord = (uAtlas * aTexCoord).xy;
 
     vec4 newPos = vec4(aPosition.x,aPosition.y,aPosition.z,1);
 	
@@ -161,7 +161,6 @@ void main()
     tessPos.z += calculatePerlinNoise(aPosition.xyz);
 
     //with perlin noise
-    aTexCoordOut = uMVP * uAtlas * aTexCoord;	
     gl_Position = uMVP * uAtlas * tessPos;	// (2)
 }
 //

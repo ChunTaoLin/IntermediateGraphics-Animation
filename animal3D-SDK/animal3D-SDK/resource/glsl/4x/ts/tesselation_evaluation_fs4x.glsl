@@ -14,11 +14,17 @@ out gl_PerVertex {
   float gl_ClipDistance[];
 };
 
-layout(triangles) in;
+vec2 interpolate2D(vec2 v0, vec2 v1, vec2 v2)
+{
+    return vec2(gl_TessCoord.x) * v0 + vec2(gl_TessCoord.y) * v1 + vec2(gl_TessCoord.z) * v2;
+}
 
+layout(triangles) in;
+in vec2 aESTexCoord[];
+out vec2 aGSTexCoord;
 void main(void)
 {
-   
+    aGSTexCoord = interpolate2D(aESTexCoord[0], aESTexCoord[1], aESTexCoord[2]);
     vec4 p1 = mix(gl_in[1].gl_Position,gl_in[0].gl_Position,gl_TessCoord.x);
     vec4 p2 = mix(gl_in[2].gl_Position,gl_in[3].gl_Position,gl_TessCoord.x);
      

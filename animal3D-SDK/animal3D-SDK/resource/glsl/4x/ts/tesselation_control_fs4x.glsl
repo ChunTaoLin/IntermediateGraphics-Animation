@@ -19,9 +19,12 @@ out gl_PerVertex
 
 layout (vertices = 3) out;
 //layout (location = 8) in vec4 stuff;
+in vec2 aCSTexCoord[];
+out vec2 aESTexCoord[];
 
 void main(void)
 {
+    aESTexCoord[gl_InvocationID] = aCSTexCoord[gl_InvocationID];
     gl_TessLevelInner[0] = 7.0;
     gl_TessLevelOuter[0] = 2.0;
     gl_TessLevelOuter[1] = 3.0;
