@@ -43,6 +43,19 @@ layout (location = 0) in vec4 aPosition;
 
 uniform ubTransformMVP {
 	mat4 uMVP[MAX_INSTANCES];
+
+};
+
+struct a3_HierarchyNode // 1 int = 4 bytes
+{						
+	int name[8];
+	int index;
+	int parentIndex;
+};
+
+uniform ubHierarchy
+{
+	a3_HierarchyNode node[MAX_NODES];
 };
 
 uniform vec4 uColor[MAX_COLORS];
@@ -52,7 +65,8 @@ out vec4 vColor;
 void main()
 {
 	gl_Position = uMVP[gl_InstanceID] * aPosition;
-
-	// DUMMY OUTPUT: select first color
-	vColor = uColor[0];
+	//Set the color index to the nodes index
+	int colorIndex = node[gl_InstanceID].index; // MAX_COLORS and modulo to cycle colours correctly
+	//Use that to pick the right color
+	vColor = uColor[colorIndex];
 }
