@@ -155,10 +155,10 @@ void a3keyframes_update(a3_DemoState* demoState, a3_Demo_Keyframes* demoMode, a3
 
 		demoState->animationTimeCount += (a3real)dt / animationTime;
 
-		if (demoState->animationTimeCount > 0.8)
+		if (demoState->animationTimeCount >= 1.0)
 		{
 			demoState->currentPoseIndex = ( demoState->currentPoseIndex + 1 ) % 3;
-			demoState->animationTimeCount = 0.5;
+			demoState->animationTimeCount = 0.0;
 		}
 
 		int stuff = demoState->currentPoseIndex + 1  % 3;
@@ -171,11 +171,11 @@ void a3keyframes_update(a3_DemoState* demoState, a3_Demo_Keyframes* demoMode, a3
 		for (i = 0; i < currentHierarchy->numNodes; ++i)
 		{
 			a3_HierarchyNodePose myCurrentPose = currentPose->nodePose[i];
-			a3_HierarchyNodePose nextPoseNode = nextPose->nodePose[demoState->currentPoseIndex + 1 % 3];
+			a3_HierarchyNodePose nextPoseNode = nextPose->nodePose[i];
 
 			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].translation.v, myCurrentPose.translation.v, nextPoseNode.translation.v, demoState->animationTimeCount);
 			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].orientation.v, myCurrentPose.orientation.v, nextPoseNode.orientation.v, demoState->animationTimeCount);
-			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].scale.v, myCurrentPose.scale.v, nextPoseNode.scale.v, demoState->animationTimeCount);
+			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].scale.v, myCurrentPose.scale.v, nextPoseNode.scale.v, 1.0);
 		}
 	}
 	// update animation: 
