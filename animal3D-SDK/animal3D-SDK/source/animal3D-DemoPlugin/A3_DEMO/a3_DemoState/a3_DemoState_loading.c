@@ -1203,22 +1203,8 @@ void a3demo_loadAnimation(a3_DemoState* demoState)
 	demoState->demoMode_keyframes->editSkeletonIndex = 0;
 	hierarchy = demoState->hierarchy_skel + demoState->demoMode_keyframes->editSkeletonIndex;
 	hierarchyPoseGroup = demoState->hierarchyPoseGroup_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	a3hierarchyPoseGroupCreate(hierarchyPoseGroup, hierarchy, 1);
+	a3hierarchyPoseGroupCreate(hierarchyPoseGroup, hierarchy, 3);
 	hierarchyPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->demoMode_keyframes->editSkeletonIndex];
-
-	////pose value 1
-	//demoState->demoMode_keyframes->editSkeletonIndex = 1;
-	//hierarchy = demoState->hierarchy_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	//hierarchyPoseGroup = demoState->hierarchyPoseGroup_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	//a3hierarchyPoseGroupCreate(hierarchyPoseGroup, hierarchy, 1);
-	//hierarchyPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->demoMode_keyframes->editSkeletonIndex];
-
-	////pose value 2
-	//demoState->demoMode_keyframes->editSkeletonIndex = 2;
-	//hierarchy = demoState->hierarchy_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	//hierarchyPoseGroup = demoState->hierarchyPoseGroup_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	//a3hierarchyPoseGroupCreate(hierarchyPoseGroup, hierarchy, 1);
-	//hierarchyPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->demoMode_keyframes->editSkeletonIndex];
 
 
 	// define "bind pose" or the initial transformation 
@@ -1365,25 +1351,7 @@ void a3demo_loadAnimation(a3_DemoState* demoState)
 	a3hierarchyNodePoseSetTranslation(hierarchyNodePose, -0.5f, 0.0f, 0.0f);
 
 
-	// ****TO-DO: 
-	//	-> set up additional poses
-
-
-
-	// finally set up hierarchy states
-	hierarchyPoseGroup = demoState->hierarchyPoseGroup_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	hierarchyState = demoState->hierarchyState_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	a3hierarchyStateCreate(hierarchyState, hierarchyPoseGroup);
-
-	// POSE 2 -------------------------------------------------------------------------------------------------------
-	demoState->demoMode_keyframes->editSkeletonIndex = 0;
-	hierarchy = demoState->hierarchy_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	hierarchyPoseGroup = demoState->hierarchyPoseGroup_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	a3hierarchyPoseGroupCreate(hierarchyPoseGroup, hierarchy, 2);
-	hierarchyPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->demoMode_keyframes->editSkeletonIndex];
-
-	// define "bind pose" or the initial transformation 
-	//	description for each joint (not a literal transform)
+	//POSE 2
 	p = 0;
 	j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
 	hierarchyNodePose = hierarchyPoseGroup->pose[p].nodePose + j;
@@ -1525,18 +1493,7 @@ void a3demo_loadAnimation(a3_DemoState* demoState)
 	hierarchyNodePose = hierarchyPoseGroup->pose[p].nodePose + j;
 	a3hierarchyNodePoseSetTranslation(hierarchyNodePose, -0.5f, 0.0f, 0.0f);
 
-	// finally set up hierarchy states
-	hierarchyPoseGroup = demoState->hierarchyPoseGroup_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	hierarchyState = demoState->hierarchyState_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	a3hierarchyStateCreate(hierarchyState, hierarchyPoseGroup);
-
-	// POSE 3 -------------------------------------------------------------------------------------------------------
-	demoState->demoMode_keyframes->editSkeletonIndex = 0;
-	hierarchy = demoState->hierarchy_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	hierarchyPoseGroup = demoState->hierarchyPoseGroup_skel + demoState->demoMode_keyframes->editSkeletonIndex;
-	a3hierarchyPoseGroupCreate(hierarchyPoseGroup, hierarchy, 2);
-	hierarchyPoseFlag = demoState->hierarchyPoseFlag_skel[demoState->demoMode_keyframes->editSkeletonIndex];
-
+	//POSE 3
 	// define "bind pose" or the initial transformation 
 	//	description for each joint (not a literal transform)
 	p = 0;
