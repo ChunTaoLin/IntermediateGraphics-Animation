@@ -221,6 +221,7 @@ extern "C"
 		a3_HierarchyPoseFlag hierarchyPoseFlag_skel[1][128];
 		int currentPoseIndex;
 		int nextPoseIndex;
+		float animationTimeCount;
 
 		//---------------------------------------------------------------------
 		// object arrays: organized as anonymous unions for two reasons: 

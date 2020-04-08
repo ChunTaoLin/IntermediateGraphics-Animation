@@ -151,17 +151,16 @@ void a3keyframes_update(a3_DemoState* demoState, a3_Demo_Keyframes* demoMode, a3
 
 	if (demoMode->editingJoint == false)
 	{
-		demoState->segmentTime += (a3real)dt;
+		float animationTime = 15;
 
-		if (demoState->segmentParam > 0.8)
+		demoState->animationTimeCount += (a3real)dt / animationTime;
+
+		if (demoState->animationTimeCount > 0.8)
 		{
 			demoState->currentPoseIndex = ( demoState->currentPoseIndex + 1 ) % 3;
-			//demoState->segmentParam = 0;
+			demoState->animationTimeCount = 0.5;
 		}
-	//	demoState->hierarchyState_skel->localPose[0].nodePose->translation = demoState->hierarchyState_skel->poseGroup[0].pose[0].nodePose->translation;
-		//demoState->hierarchyState_skel->localPose[i].nodePose->translation
-		//demoState->hierarchyState_skel->objectSpace->transform = demoState->hierarchyState_skel->localPose[0].nodePose->translation;
-		//demoState->hierarchyState_skel->poseGroup[0].objectSpace;
+
 		int stuff = demoState->currentPoseIndex + 1  % 3;
 		a3_HierarchyPose* currentPose = &(currentHierarchyPoseGroup->pose[demoState->currentPoseIndex]);
 		a3_HierarchyPose* nextPose = &(currentHierarchyPoseGroup->pose[stuff]);
@@ -174,9 +173,9 @@ void a3keyframes_update(a3_DemoState* demoState, a3_Demo_Keyframes* demoMode, a3
 			a3_HierarchyNodePose myCurrentPose = currentPose->nodePose[i];
 			a3_HierarchyNodePose nextPoseNode = nextPose->nodePose[demoState->currentPoseIndex + 1 % 3];
 
-			a3real4Lerp(currentPose->nodePose[i].translation.v, myCurrentPose.translation.v, nextPoseNode.translation.v, .8f);
-			a3real4Lerp(currentPose->nodePose[i].orientation.v, myCurrentPose.orientation.v, nextPoseNode.orientation.v, .8f);
-			a3real4Lerp(currentPose->nodePose[i].scale.v, myCurrentPose.scale.v, nextPoseNode.scale.v, .8f);
+			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].translation.v, myCurrentPose.translation.v, nextPoseNode.translation.v, demoState->animationTimeCount);
+			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].orientation.v, myCurrentPose.orientation.v, nextPoseNode.orientation.v, demoState->animationTimeCount);
+			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].scale.v, myCurrentPose.scale.v, nextPoseNode.scale.v, demoState->animationTimeCount);
 		}
 	}
 	// update animation: 
@@ -184,7 +183,6 @@ void a3keyframes_update(a3_DemoState* demoState, a3_Demo_Keyframes* demoMode, a3
 	//	-> convert the current pose to transforms
 	//	-> forward kinematics
 	//	-> skinning matrices	
-
 	a3hierarchyPoseConvert(currentHierarchyState->localSpace,
 		currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
 	a3kinematicsSolveForward(demoState->hierarchyState_skel);
