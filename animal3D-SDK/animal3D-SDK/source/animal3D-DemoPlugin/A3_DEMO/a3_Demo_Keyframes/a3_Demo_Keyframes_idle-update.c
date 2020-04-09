@@ -151,31 +151,35 @@ void a3keyframes_update(a3_DemoState* demoState, a3_Demo_Keyframes* demoMode, a3
 
 	if (demoMode->editingJoint == false)
 	{
+
+		//increment animation time by delta time divided by the animationTime, this float is really to help make the count look smoother
 		float animationTime = 15;
 
 		demoState->animationTimeCount += (a3real)dt / animationTime;
 
+		//If it goes beyond the count, then reset
 		if (demoState->animationTimeCount >= 1.0)
 		{
 			demoState->currentPoseIndex = ( demoState->currentPoseIndex + 1 ) % 3;
 			demoState->animationTimeCount = 0.0;
 		}
 
-		int stuff = demoState->currentPoseIndex + 1  % 3;
-		a3_HierarchyPose* currentPose = &(currentHierarchyPoseGroup->pose[demoState->currentPoseIndex]);
-		a3_HierarchyPose* nextPose = &(currentHierarchyPoseGroup->pose[stuff]);
+		a3_HierarchyPose* currentPose = &(currentHierarchyPoseGroup->pose[demoState->currentPoseIndex % 3]);
+		a3_HierarchyPose* nextPose = &(currentHierarchyPoseGroup->pose[(demoState->currentPoseIndex + 1) % 3]);
 
 		a3hierarchyPoseCopy(currentHierarchyState->localPose,
-			currentHierarchyPoseGroup->pose + demoState->currentPoseIndex, currentHierarchy->numNodes);
+			currentHierarchyPoseGroup->pose, currentHierarchy->numNodes);
 
+		//Iterate for all the nodes
 		for (i = 0; i < currentHierarchy->numNodes; ++i)
 		{
 			a3_HierarchyNodePose myCurrentPose = currentPose->nodePose[i];
 			a3_HierarchyNodePose nextPoseNode = nextPose->nodePose[i];
 
+			//Linear interpolation for each.
 			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].translation.v, myCurrentPose.translation.v, nextPoseNode.translation.v, demoState->animationTimeCount);
 			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].orientation.v, myCurrentPose.orientation.v, nextPoseNode.orientation.v, demoState->animationTimeCount);
-			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].scale.v, myCurrentPose.scale.v, nextPoseNode.scale.v, 1.0);
+			a3real4Lerp(currentHierarchyState->localPose->nodePose[i].scale.v, myCurrentPose.scale.v, nextPoseNode.scale.v, demoState->animationTimeCount);
 		}
 	}
 	// update animation: 
@@ -185,6 +189,8 @@ void a3keyframes_update(a3_DemoState* demoState, a3_Demo_Keyframes* demoMode, a3
 	//	-> skinning matrices	
 	a3hierarchyPoseConvert(currentHierarchyState->localSpace,
 		currentHierarchyState->localPose, currentHierarchy->numNodes, 0);
+	a3kinematicsSolveForward(demoState->hierarchyState_skel);
+	a3kinematicsSolveInverse(demoState->hierarchyState_skel);
 	a3kinematicsSolveForward(demoState->hierarchyState_skel);
 
 	// update buffers: 
