@@ -1,0 +1,16 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-GraphicsFinal.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\simon\Desktop\ActualFinal\GraphicsFinal\Intermediate\Build\Win64\GraphicsFinalEditor\Development\Engine\SharedPCH.Engine.h.obj"
+"C:\Users\simon\Desktop\ActualFinal\GraphicsFinal\Intermediate\Build\Win64\UE4Editor\Development\GraphicsFinal\GraphicsFinal.cpp.obj"
+"C:\Users\simon\Desktop\ActualFinal\GraphicsFinal\Intermediate\Build\Win64\UE4Editor\Development\GraphicsFinal\GraphicsFinalGameModeBase.cpp.obj"
+"C:\Users\simon\Desktop\ActualFinal\GraphicsFinal\Intermediate\Build\Win64\UE4Editor\Development\GraphicsFinal\GraphicsFinal.init.gen.cpp.obj"
+"C:\Users\simon\Desktop\ActualFinal\GraphicsFinal\Intermediate\Build\Win64\UE4Editor\Development\GraphicsFinal\GraphicsFinalGameModeBase.gen.cpp.obj"
+"C:\Users\simon\Desktop\ActualFinal\GraphicsFinal\Intermediate\Build\Win64\UE4Editor\Development\GraphicsFinal\Default.rc2.res"
+/OUT:"C:\Users\simon\Desktop\ActualFinal\GraphicsFinal\Intermediate\Build\Win64\UE4Editor\Development\GraphicsFinal\UE4Editor-GraphicsFinal.lib"
+/INCLUDE:IMPLEMENT_MODULE_GraphicsFinal
