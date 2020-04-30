@@ -8,6 +8,28 @@ APaintPawn::APaintPawn()
 	
 }
 
+void APaintPawn::BeginPlay() 
+{
+	EnableMouse();
+	createUIWidget();
+	Super::BeginPlay();
+}
+
+void APaintPawn::setPlane() 
+{
+	TSubclassOf<ACanvasPlane> classToFind;
+	classToFind = ACanvasPlane::StaticClass();
+	TArray<AActor*> foundPlanes;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), classToFind, foundPlanes);
+	plane = Cast<ACanvasPlane>(foundPlanes[0]);
+}
+
+void APaintPawn::createUIWidget() 
+{
+	UUserWidget* Menu = CreateWidget<UUserWidget>(GetWorld()->GetFirstPlayerController(), CharacterSelectWidgetClass);
+	Menu->AddToViewport();
+}
+
 void APaintPawn::EnableMouse()
 {
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
@@ -18,7 +40,6 @@ void APaintPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	Super::SetupPlayerInputComponent(InputComponent);
 	InputComponent->BindAxis("Draw", this, &APaintPawn::draw);
 	InputComponent->BindAxis("Remove", this, &APaintPawn::remove);
-	InputComponent->BindAxis("Clear", this, &APaintPawn::clear);
 }
 
 void APaintPawn::draw(float AxisValue) 
@@ -31,12 +52,9 @@ void APaintPawn::remove(float AxisValue)
 	isRightMouseDown = AxisValue == 1.0f;
 }
 
-void APaintPawn::clear(float AxisValue) 
+void APaintPawn::clear() 
 {
-	if (AxisValue == 1.0f) 
-	{
-		//plane->clearRenderTarget();
-	}
+	plane->clearRenderTarget();
 }
 
 void APaintPawn::updateSphere() 
@@ -70,4 +88,6 @@ void APaintPawn::Tick(float DeltaTime)
 	{
 		plane->createEraseBrush(position);
 	}
+
+	Super::Tick(DeltaTime);
 }

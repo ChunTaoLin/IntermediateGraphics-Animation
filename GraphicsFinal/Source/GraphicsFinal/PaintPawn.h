@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SpectatorPawn.h"
+#include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "CanvasPlane.h"
 #include "PaintPawn.generated.h"
 
@@ -19,21 +21,32 @@ class GRAPHICSFINAL_API APaintPawn : public ASpectatorPawn
 public:
 
 	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
 
+	// Booleans
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) bool isLeftMouseDown;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) bool isRightMouseDown;
+	
+	// Vectors
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) FVector position;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) FVector mouseVelocity;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) FVector velocity;
+	
+	// Floats
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) float intensity;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) float brushSize;
+	
+	// Classes
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) ACanvasPlane* plane;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere) TSubclassOf<UUserWidget> CharacterSelectWidgetClass;
 
 	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
 	void draw(float AxisValue);
 	void remove(float AxisValue);
-	void clear(float AxisValue);
+	void clear();
 	UFUNCTION(BlueprintCallable) void EnableMouse();
 	UFUNCTION(BlueprintCallable) void updateSphere();
+	UFUNCTION(BlueprintCallable) void setPlane();
+	UFUNCTION(BlueprintCallable) void createUIWidget();
 	UFUNCTION(BlueprintCallable) void findTraceUnderMouse();
 };
