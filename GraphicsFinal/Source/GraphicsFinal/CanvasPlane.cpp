@@ -30,12 +30,12 @@ void ACanvasPlane::OnConstruction(const FTransform& Transform)
 	eraseBrush = UMaterialInstanceDynamic::Create(renderTargetOne, NULL);
 }
 
-void ACanvasPlane::createEraseBrush(const FVector& position)
+void ACanvasPlane::createEraseBrush(const FVector& position, const float& brushSize)
 {
 	UStaticMeshComponent * planeObject = Cast<UStaticMeshComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass()));
 	float planeLength = (planeObject->GetStaticMesh()->GetBounds().BoxExtent.X * 2.0f);
 	eraseBrush->SetVectorParameterValue("Position", (UKismetMathLibrary::InverseTransformLocation(GetActorTransform(), position) / planeLength) + 0.5f);
-	eraseBrush->SetScalarParameterValue("Radius", 0.5f);
+	eraseBrush->SetScalarParameterValue("Radius", brushSize);
 
 	UKismetRenderingLibrary::DrawMaterialToRenderTarget(GetWorld(), texRenderTarget, eraseBrush);
 	UKismetRenderingLibrary::DrawMaterialToRenderTarget(GetWorld(), currentRenderTarget, eraseBrush);

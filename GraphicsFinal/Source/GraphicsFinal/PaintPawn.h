@@ -43,7 +43,8 @@ public:
 	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
 	void draw(float AxisValue);
 	void remove(float AxisValue);
-	void clear();
+	UFUNCTION(BlueprintCallable) void clear();
+	UFUNCTION(BlueprintCallable) void InitializePawn();
 	UFUNCTION(BlueprintCallable) void EnableMouse();
 	UFUNCTION(BlueprintCallable) void updateSphere();
 	UFUNCTION(BlueprintCallable) void setPlane();

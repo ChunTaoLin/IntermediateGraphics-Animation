@@ -10,9 +10,14 @@ APaintPawn::APaintPawn()
 
 void APaintPawn::BeginPlay() 
 {
+	Super::BeginPlay();
+}
+
+void APaintPawn::InitializePawn() 
+{
 	EnableMouse();
 	createUIWidget();
-	Super::BeginPlay();
+	setPlane();
 }
 
 void APaintPawn::setPlane() 
@@ -86,8 +91,6 @@ void APaintPawn::Tick(float DeltaTime)
 	}
 	else if (isRightMouseDown) 
 	{
-		plane->createEraseBrush(position);
+		plane->createEraseBrush(position, brushSize);
 	}
-
-	Super::Tick(DeltaTime);
 }

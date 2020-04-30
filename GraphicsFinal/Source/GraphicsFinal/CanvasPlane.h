@@ -37,7 +37,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) UMaterialInterface* renderTarget;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) UMaterialInterface* renderTargetOne;
 
-	UFUNCTION(BlueprintCallable) void createEraseBrush(const FVector& position);
+	UFUNCTION(BlueprintCallable) void createEraseBrush(const FVector& position, const float& brushSize);
 	UFUNCTION(BlueprintCallable) void createDrawBrush(const FVector& position, const FVector& velocity, const float& brushSize);
 	UFUNCTION(BlueprintCallable) void clearRenderTarget();
 	UFUNCTION(BlueprintCallable) void makeRenderTarget();
