@@ -18,19 +18,26 @@ class GRAPHICSFINAL_API APaintPawn : public ASpectatorPawn
 	GENERATED_BODY()
 	APaintPawn();
 
-public:
-
+protected:
+	// Built-in functions
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
+	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
 
+private:
+	// Local Functions
+	void Draw(float AxisValue);
+	void Remove(float AxisValue);
+
+public:
 	// Booleans
-	UPROPERTY(BlueprintReadWrite, EditAnywhere) bool isLeftMouseDown;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere) bool isRightMouseDown;
+	UPROPERTY() bool isLeftMouseDown;
+	UPROPERTY() bool isRightMouseDown;
 	
 	// Vectors
-	UPROPERTY(BlueprintReadWrite, EditAnywhere) FVector position;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere) FVector mouseVelocity;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere) FVector velocity;
+	UPROPERTY() FVector position;
+	UPROPERTY() FVector mouseVelocity;
+	UPROPERTY() FVector velocity;
 	
 	// Floats
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) float intensity;
@@ -40,14 +47,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) ACanvasPlane* plane;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) TSubclassOf<UUserWidget> CharacterSelectWidgetClass;
 
-	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
-	void draw(float AxisValue);
-	void remove(float AxisValue);
-	UFUNCTION(BlueprintCallable) void clear();
+	// Functions
+	UFUNCTION(BlueprintCallable) void Clear();
 	UFUNCTION(BlueprintCallable) void InitializePawn();
 	UFUNCTION(BlueprintCallable) void EnableMouse();
-	UFUNCTION(BlueprintCallable) void updateSphere();
-	UFUNCTION(BlueprintCallable) void setPlane();
-	UFUNCTION(BlueprintCallable) void createUIWidget();
-	UFUNCTION(BlueprintCallable) void findTraceUnderMouse();
+	UFUNCTION(BlueprintCallable) void UpdateSphere();
+	UFUNCTION(BlueprintCallable) void SetPlane();
+	UFUNCTION(BlueprintCallable) void CreateUIWidget();
+	UFUNCTION(BlueprintCallable) void FindTraceUnderMouse();
 };

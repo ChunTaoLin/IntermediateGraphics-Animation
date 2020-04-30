@@ -12,6 +12,10 @@
 #include "Components/StaticMeshComponent.h"
 #include "CanvasPlane.generated.h"
 
+// Constants
+const int SIZE_OF_RENDER_TARGET = 1026;
+const float BRUSH_POSITION_OFFSET = 0.5f;
+
 UCLASS()
 class GRAPHICSFINAL_API ACanvasPlane : public AActor
 {
@@ -22,23 +26,30 @@ public:
 	ACanvasPlane();
 
 protected:
-	// Called when the game starts or when spawned
+	// Built-in functions
 	virtual void BeginPlay() override;
 	virtual void OnConstruction(const FTransform& Transform) override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere) UMaterialInstanceDynamic * brush;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere) UMaterialInstanceDynamic * eraseBrush;
+private:
+	// Local functions
+	void MakeRenderTarget();
+
+public:	
+	// Material instances
+	UPROPERTY(BlueprintReadWrite, EditAnywhere) UMaterialInstanceDynamic* brush;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere) UMaterialInstanceDynamic* eraseBrush;
+	
+	// Render Targets
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) UTextureRenderTarget2D * currentRenderTarget;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) UTextureRenderTarget2D * texRenderTarget;
+	
+	// Material Interfaces
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) UMaterialInterface* renderTarget;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere) UMaterialInterface* renderTargetOne;
 
-	UFUNCTION(BlueprintCallable) void createEraseBrush(const FVector& position, const float& brushSize);
-	UFUNCTION(BlueprintCallable) void createDrawBrush(const FVector& position, const FVector& velocity, const float& brushSize);
-	UFUNCTION(BlueprintCallable) void clearRenderTarget();
-	UFUNCTION(BlueprintCallable) void makeRenderTarget();
+	// Functions
+	UFUNCTION(BlueprintCallable) void CreateEraseBrush(const FVector& position, const float& brushSize);
+	UFUNCTION(BlueprintCallable) void CreateDrawBrush(const FVector& position, const FVector& velocity, const float& brushSize);
+	UFUNCTION(BlueprintCallable) void ClearRenderTarget();
 };
